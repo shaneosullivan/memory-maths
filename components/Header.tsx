@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useApp } from '@/contexts/AppContext';
-import { Profile } from '@/types';
-import styles from './Header.module.css';
+import { useState, useEffect } from "react";
+import { useApp } from "@/contexts/AppContext";
+import { Profile } from "@/types";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const { state, switchProfile, deleteProfile } = useApp();
   const [showDropdown, setShowDropdown] = useState(false);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newProfileName, setNewProfileName] = useState('');
+  const [newProfileName, setNewProfileName] = useState("");
 
   useEffect(() => {
-    const savedProfiles = JSON.parse(localStorage.getItem('profiles') || '[]');
+    const savedProfiles = JSON.parse(localStorage.getItem("profiles") || "[]");
     setProfiles(savedProfiles);
   }, []);
 
@@ -27,20 +27,20 @@ export default function Header() {
         createdAt: new Date(),
         lastUsed: new Date(),
       };
-      
+
       const updatedProfiles = [...profiles, profile];
       setProfiles(updatedProfiles);
-      localStorage.setItem('profiles', JSON.stringify(updatedProfiles));
-      
+      localStorage.setItem("profiles", JSON.stringify(updatedProfiles));
+
       switchProfile(profile);
-      setNewProfileName('');
+      setNewProfileName("");
       setShowCreateForm(false);
       setShowDropdown(false);
     }
   };
 
   const handleDeleteProfile = (profileId: string) => {
-    const updatedProfiles = profiles.filter(p => p.id !== profileId);
+    const updatedProfiles = profiles.filter((p) => p.id !== profileId);
     setProfiles(updatedProfiles);
     deleteProfile(profileId);
   };
@@ -59,7 +59,7 @@ export default function Header() {
             {state.phase.charAt(0).toUpperCase() + state.phase.slice(1)} Phase
           </div>
         </div>
-        
+
         <div className={styles.right}>
           <div className={styles.profileDropdown}>
             <button
@@ -69,7 +69,7 @@ export default function Header() {
               {state.currentProfile?.name}
               <span className={styles.arrow}>▼</span>
             </button>
-            
+
             {showDropdown && (
               <div className={styles.dropdown}>
                 {profiles.map((profile) => (
@@ -95,25 +95,28 @@ export default function Header() {
                     )}
                   </div>
                 ))}
-                
-                <div className={styles.dropdownSeparator} />
-                
+
+                {/* <div className={styles.dropdownSeparator} /> */}
+
                 {!showCreateForm ? (
                   <button
                     className={styles.createButton}
                     onClick={() => setShowCreateForm(true)}
                   >
+                    <span className={styles.createIcon}>+</span>
                     Create New Profile
                   </button>
                 ) : (
                   <div className={styles.createForm}>
                     <input
                       type="text"
-                      placeholder="Profile name"
+                      placeholder="Enter your name..."
                       value={newProfileName}
                       onChange={(e) => setNewProfileName(e.target.value)}
                       className={styles.nameInput}
-                      onKeyPress={(e) => e.key === 'Enter' && handleCreateProfile()}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && handleCreateProfile()
+                      }
                       autoFocus
                     />
                     <div className={styles.formButtons}>
@@ -128,7 +131,7 @@ export default function Header() {
                         className={styles.cancelButton}
                         onClick={() => {
                           setShowCreateForm(false);
-                          setNewProfileName('');
+                          setNewProfileName("");
                         }}
                       >
                         Cancel
