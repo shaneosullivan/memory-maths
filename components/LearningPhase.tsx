@@ -65,7 +65,7 @@ export default function LearningPhase() {
       case "operation":
         return "Choose Operation";
       case "baseNumber":
-        return "Select Base Number";
+        return "Select A Number";
       case "range":
         return "Set Number Range";
       case "practice":
@@ -116,8 +116,8 @@ export default function LearningPhase() {
         {currentStep === "baseNumber" && (
           <div className={styles.stepContent}>
             <BackButton onClick={handleBackClick} />
-            
-            {state.operation === 'multiplication' && (
+
+            {state.operation === "multiplication" && (
               <div className={styles.squareOption}>
                 <h3>Practice Type</h3>
                 <div className={styles.practiceTypeButtons}>
@@ -139,13 +139,13 @@ export default function LearningPhase() {
                   </button>
                 </div>
                 <p className={styles.practiceTypeDescription}>
-                  {state.isSquareNumbers 
+                  {state.isSquareNumbers
                     ? "Practice square numbers like 2×2=4, 3×3=9, 4×4=16"
-                    : "Practice multiplication with a base number"}
+                    : "Practice multiplying a chosen number by other numbers"}
                 </p>
               </div>
             )}
-            
+
             {!state.isSquareNumbers && (
               <div className={styles.numberButtons}>
                 {Array.from({ length: 19 }, (_, i) => i + 2).map((num) => (
@@ -161,7 +161,7 @@ export default function LearningPhase() {
                 ))}
               </div>
             )}
-            
+
             {state.isSquareNumbers && (
               <div className={styles.stepActions}>
                 <button

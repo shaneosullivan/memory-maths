@@ -399,15 +399,12 @@
 
   .dropdown {
     right: 0;
-    min-width: 300px;
-    width: auto;
   }
 
   .createButton {
     font-size: var(--text-sm);
     padding: var(--space-3);
-    width: calc(100% - var(--space-3));
-    margin: var(--space-1) var(--space-1) var(--space-2) var(--space-1);
+    margin: var(--space-2);
   }
 }
 
