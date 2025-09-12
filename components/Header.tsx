@@ -1,0 +1,146 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useApp } from '@/contexts/AppContext';
+import { Profile } from '@/types';
+import styles from './Header.module.css';
+
+export default function Header() {
+  const { state, switchProfile, deleteProfile } = useApp();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newProfileName, setNewProfileName] = useState('');
+
+  useEffect(() => {
+    const savedProfiles = JSON.parse(localStorage.getItem('profiles') || '[]');
+    setProfiles(savedProfiles);
+  }, []);
+
+  const handleCreateProfile = () => {
+    if (newProfileName.trim()) {
+      const profile: Profile = {
+        id: Date.now().toString(),
+        name: newProfileName.trim(),
+        isGuest: false,
+        stats: [],
+        createdAt: new Date(),
+        lastUsed: new Date(),
+      };
+      
+      const updatedProfiles = [...profiles, profile];
+      setProfiles(updatedProfiles);
+      localStorage.setItem('profiles', JSON.stringify(updatedProfiles));
+      
+      switchProfile(profile);
+      setNewProfileName('');
+      setShowCreateForm(false);
+      setShowDropdown(false);
+    }
+  };
+
+  const handleDeleteProfile = (profileId: string) => {
+    const updatedProfiles = profiles.filter(p => p.id !== profileId);
+    setProfiles(updatedProfiles);
+    deleteProfile(profileId);
+  };
+
+  const handleSwitchProfile = (profile: Profile) => {
+    switchProfile(profile);
+    setShowDropdown(false);
+  };
+
+  return (
+    <header className={styles.header}>
+      <div className={styles.container}>
+        <div className={styles.left}>
+          <h1 className={styles.title}>Memory Maths</h1>
+          <div className={styles.phaseIndicator}>
+            {state.phase.charAt(0).toUpperCase() + state.phase.slice(1)} Phase
+          </div>
+        </div>
+        
+        <div className={styles.right}>
+          <div className={styles.profileDropdown}>
+            <button
+              className={styles.profileButton}
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              {state.currentProfile?.name}
+              <span className={styles.arrow}>▼</span>
+            </button>
+            
+            {showDropdown && (
+              <div className={styles.dropdown}>
+                {profiles.map((profile) => (
+                  <div key={profile.id} className={styles.profileItem}>
+                    <button
+                      className={styles.profileOption}
+                      onClick={() => handleSwitchProfile(profile)}
+                    >
+                      <div>
+                        <div className={styles.profileName}>{profile.name}</div>
+                        <div className={styles.profileStats}>
+                          {profile.stats.length} sessions
+                        </div>
+                      </div>
+                    </button>
+                    {!profile.isGuest && (
+                      <button
+                        className={styles.deleteButton}
+                        onClick={() => handleDeleteProfile(profile.id)}
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
+                
+                <div className={styles.dropdownSeparator} />
+                
+                {!showCreateForm ? (
+                  <button
+                    className={styles.createButton}
+                    onClick={() => setShowCreateForm(true)}
+                  >
+                    Create New Profile
+                  </button>
+                ) : (
+                  <div className={styles.createForm}>
+                    <input
+                      type="text"
+                      placeholder="Profile name"
+                      value={newProfileName}
+                      onChange={(e) => setNewProfileName(e.target.value)}
+                      className={styles.nameInput}
+                      onKeyPress={(e) => e.key === 'Enter' && handleCreateProfile()}
+                      autoFocus
+                    />
+                    <div className={styles.formButtons}>
+                      <button
+                        className={styles.saveButton}
+                        onClick={handleCreateProfile}
+                        disabled={!newProfileName.trim()}
+                      >
+                        Create
+                      </button>
+                      <button
+                        className={styles.cancelButton}
+                        onClick={() => {
+                          setShowCreateForm(false);
+                          setNewProfileName('');
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}

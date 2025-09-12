@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "PORT=3033 next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start"
+    "start": "next start",
+    "devkill": "kill -9 $(lsof -t -i:3033)"
   },
   "dependencies": {
     "react": "19.1.0",

@@ -1,0 +1,175 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.card {
+  background: var(--background);
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--foreground);
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--gray-600);
+  margin-bottom: 32px;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--foreground);
+}
+
+.profileList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profileButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 8px;
+  background: var(--background);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profileButton:hover {
+  border-color: var(--foreground);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profileName {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.profileStats {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nameInput {
+  padding: 12px 16px;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.nameInput:focus {
+  outline: none;
+  border-color: var(--foreground);
+}
+
+.formButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.primaryButton {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--button-primary-hover);
+}
+
+.primaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  flex: 1;
+  padding: 12px 24px;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--foreground);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.secondaryButton:hover {
+  background: var(--button-secondary-hover);
+  border-color: var(--foreground);
+}
+
+.guestButton {
+  width: 100%;
+  padding: 12px 24px;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.guestButton:hover {
+  background: var(--button-secondary-hover);
+  border-color: var(--gray-600);
+}
+
+.guestNote {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 24px;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .formButtons {
+    flex-direction: column;
+  }
+}

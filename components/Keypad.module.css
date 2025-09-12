@@ -1,0 +1,161 @@
+.keypad {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: var(--space-3);
+  padding: 0;
+  background: transparent;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.emptyCell {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.key {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.key::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.key:hover {
+  border-color: var(--brand-primary);
+  background: var(--background-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.key:hover::before {
+  opacity: 1;
+}
+
+.key:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.enterKey {
+  background: linear-gradient(135deg, var(--success), var(--success-hover));
+  color: white;
+  border-color: var(--success);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.enterKey::before {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
+}
+
+.enterKey:hover {
+  background: linear-gradient(135deg, var(--success-hover), var(--success));
+  border-color: var(--success-hover);
+  box-shadow: var(--shadow-lg);
+}
+
+.deleteKey {
+  background: linear-gradient(135deg, var(--error), var(--error-hover));
+  color: white;
+  border-color: var(--error);
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+.deleteKey::before {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
+}
+
+.deleteKey:hover {
+  background: linear-gradient(135deg, var(--error-hover), var(--error));
+  border-color: var(--error-hover);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Number keys styling */
+.key:not(.enterKey):not(.deleteKey) {
+  background: var(--background);
+  border-color: var(--border-default);
+}
+
+.key:not(.enterKey):not(.deleteKey):hover {
+  background: var(--brand-primary-light);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .keypad {
+    gap: var(--space-2);
+    max-width: 280px;
+  }
+  
+  .row {
+    gap: var(--space-2);
+  }
+  
+  .key {
+    font-size: var(--text-xl);
+    border-radius: var(--radius-lg);
+  }
+  
+  .enterKey {
+    font-size: var(--text-lg);
+  }
+  
+  .deleteKey {
+    font-size: var(--text-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .keypad {
+    max-width: 260px;
+  }
+  
+  .key {
+    font-size: var(--text-lg);
+    border-radius: var(--radius-md);
+  }
+  
+  .enterKey {
+    font-size: var(--text-base);
+  }
+  
+  .deleteKey {
+    font-size: var(--text-sm);
+  }
+}
