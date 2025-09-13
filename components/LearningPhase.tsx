@@ -12,6 +12,7 @@ import styles from "./LearningPhase.module.css";
 export default function LearningPhase() {
   const {
     state,
+    dispatch,
     setBaseNumber: setBaseNumberInState,
     setRangeMin,
     setRangeMax,
@@ -34,20 +35,20 @@ export default function LearningPhase() {
 
   // Auto-generate calculations when component mounts with complete URL parameters
   useEffect(() => {
-    const hasAllParameters = urlState.operation && 
-                            (urlState.baseNumber || urlState.isSquareNumbers);
-    
+    const hasAllParameters =
+      urlState.operation && (urlState.baseNumber || urlState.isSquareNumbers);
+
     if (hasAllParameters) {
       // Use default range values if not provided in URL
       const rangeMin = urlState.rangeMin || 2;
       const rangeMax = urlState.rangeMax || 10;
-      
+
       // Sync AppContext state first
       setBaseNumberInState(urlState.baseNumber || 2);
       setRangeMin(rangeMin);
       setRangeMax(rangeMax);
       setIsSquareNumbersInState(urlState.isSquareNumbers || false);
-      
+
       // Always generate calculations when we have the required parameters
       // (don't check if calculations already exist, always regenerate for consistency)
       generateCalculations({
@@ -58,7 +59,13 @@ export default function LearningPhase() {
         isSquareNumbers: urlState.isSquareNumbers || false,
       });
     }
-  }, [urlState.operation, urlState.baseNumber, urlState.rangeMin, urlState.rangeMax, urlState.isSquareNumbers]); // Re-run when URL parameters change
+  }, [
+    urlState.operation,
+    urlState.baseNumber,
+    urlState.rangeMin,
+    urlState.rangeMax,
+    urlState.isSquareNumbers,
+  ]); // Re-run when URL parameters change
 
   const operations: { value: Operation; label: string; symbol: string }[] = [
     { value: "addition", label: "Addition", symbol: "+" },
@@ -107,6 +114,38 @@ export default function LearningPhase() {
     moveToPhase("practice");
   };
 
+  const handleShowAll = () => {
+    state.calculations.forEach((_, index) => {
+      dispatch({
+        type: "UPDATE_CALCULATION",
+        payload: {
+          index,
+          calculation: { showAnswer: true },
+        },
+      });
+    });
+  };
+
+  const handleHideAll = () => {
+    state.calculations.forEach((_, index) => {
+      dispatch({
+        type: "UPDATE_CALCULATION",
+        payload: {
+          index,
+          calculation: { showAnswer: false },
+        },
+      });
+    });
+  };
+
+  // Check if all answers are visible or hidden
+  const allAnswersVisible =
+    state.calculations.length > 0 &&
+    state.calculations.every((calc) => calc.showAnswer);
+  const allAnswersHidden =
+    state.calculations.length > 0 &&
+    state.calculations.every((calc) => !calc.showAnswer);
+
   const getStepTitle = () => {
     switch (currentStep) {
       case "operation":
@@ -116,7 +155,7 @@ export default function LearningPhase() {
       case "range":
         return "Set Number Range";
       case "practice":
-        return "Memorise Calculations";
+        return "Memorise Sums";
     }
   };
 
@@ -245,7 +284,27 @@ export default function LearningPhase() {
 
         {currentStep === "practice" && (
           <div className={styles.stepContent}>
-            <BackButton />
+            <div className={styles.practiceHeader}>
+              <BackButton />
+              <div className={styles.showHideButtons}>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={handleShowAll}
+                  disabled={allAnswersVisible}
+                >
+                  Show All
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={handleHideAll}
+                  disabled={allAnswersHidden}
+                >
+                  Hide All
+                </Button>
+              </div>
+            </div>
             <div className={styles.calculationsGrid}>
               {state.calculations.map((calc, index) => (
                 <CalculationCard
@@ -266,7 +325,7 @@ export default function LearningPhase() {
                 size="xl"
                 onClick={handleMoveToPractice}
               >
-                Move to Practice Phase
+                Go Practice!
               </Button>
             </div>
           </div>

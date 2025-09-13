@@ -26,12 +26,11 @@ export default function BackButton({
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    
+
     if (typeof window === "undefined") {
       router.push(targetUrl);
       return;
     }
-    console.log("BackButton targetUrl:", targetUrl);
 
     const targetPath = targetUrl.startsWith("?") ? targetUrl : `?${targetUrl}`;
     const maxSteps = 20; // Safety limit
@@ -52,7 +51,6 @@ export default function BackButton({
 
         if (currentUrl === targetPath) {
           // Found the target URL, we're done
-          console.log("Urls match:", currentUrl);
           return;
         } else {
           // Not the target, keep going back

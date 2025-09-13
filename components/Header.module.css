@@ -1,11 +1,41 @@
 .header {
-  background: var(--background);
-  border-bottom: 1px solid var(--border-muted);
+  background: linear-gradient(135deg, 
+    #667eea 0%, 
+    #764ba2 25%, 
+    #f093fb 50%, 
+    #f5576c 75%, 
+    #4facfe 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   position: sticky;
   top: 0;
   z-index: 50;
-  backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.85);
+  position: relative;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="rgba(255,255,255,0.1)" fill-opacity="0.05"><circle cx="30" cy="30" r="3"/></g></g></svg>');
+  opacity: 0.6;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(1deg); }
+  66% { transform: translateY(5px) rotate(-0.5deg); }
 }
 
 .container {
@@ -16,6 +46,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
+  position: relative;
+  z-index: 1;
 }
 
 .left {
@@ -41,23 +73,26 @@
 .title {
   font-size: var(--text-2xl);
   font-weight: 800;
-  color: var(--foreground);
+  color: white;
   letter-spacing: -0.02em;
   margin: 0;
   transition: inherit;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .phaseIndicator {
   display: inline-flex;
   align-items: center;
   padding: var(--space-1) var(--space-3);
-  background: var(--brand-primary-light);
-  color: var(--brand-primary);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 0.025em;
   white-space: nowrap;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .right {
@@ -75,32 +110,33 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
-  background: var(--background);
-  border: 1px solid var(--border-default);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-lg);
   font-size: var(--text-sm);
   font-weight: 500;
-  color: var(--foreground);
+  color: white;
   transition: all var(--transition-fast);
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-width: 140px;
   justify-content: space-between;
+  backdrop-filter: blur(10px);
 }
 
 .profileButton:hover {
-  background: var(--background-secondary);
-  border-color: var(--border-focus);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .arrow {
   font-size: var(--text-xs);
-  color: var(--foreground-subtle);
+  color: rgba(255, 255, 255, 0.8);
   transition: transform var(--transition-fast);
 }
 
 .profileButton:hover .arrow {
-  color: var(--foreground-muted);
+  color: white;
 }
 
 .dropdown {
@@ -108,10 +144,11 @@
   top: calc(100% + var(--space-2));
   right: 0;
   width: fit-content;
-  background: var(--background);
-  border: 1px solid var(--border-default);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
   z-index: 100;
   overflow: visible;
   animation: dropdownEnter 200ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -142,10 +179,13 @@
   background: none;
   border: none;
   transition: background-color var(--transition-fast);
+  border-radius: var(--radius-lg);
+  margin: var(--space-1);
 }
 
 .profileOption:hover {
-  background: var(--background-secondary);
+  background: rgba(0, 102, 255, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .profileName {
@@ -157,7 +197,7 @@
 
 .profileStats {
   font-size: var(--text-xs);
-  color: var(--foreground-subtle);
+  color: var(--foreground-muted);
 }
 
 .deleteButton {
@@ -229,7 +269,7 @@
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 102, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 102, 255, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -277,10 +317,11 @@
 
 .createForm {
   padding: var(--space-4);
-  background: var(--background-secondary);
+  background: rgba(248, 250, 252, 0.8);
+  backdrop-filter: blur(10px);
   margin: var(--space-2);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   min-width: 280px;
 }
 

@@ -22,7 +22,8 @@ export default function PracticePhase() {
     setRangeMax,
     setIsSquareNumbers,
   } = useApp();
-  const { navigateToPhase, getCurrentState, setCurrentIndex } = useUrlNavigation();
+  const { navigateToPhase, getCurrentState, setCurrentIndex } =
+    useUrlNavigation();
   const [currentInput, setCurrentInput] = useState("");
   const [showMultipleChoice, setShowMultipleChoice] = useState(false);
   const [multipleChoiceOptions, setMultipleChoiceOptions] = useState<number[]>(
@@ -67,35 +68,45 @@ export default function PracticePhase() {
         rangeMax: urlState.rangeMax,
         isSquareNumbers: urlState.isSquareNumbers || false,
       });
-      
+
       // Shuffle calculations for practice phase after generation
       setTimeout(() => {
         if (state.calculations.length > 0) {
           const shuffledCalculations = [...state.calculations]
-            .map(calc => ({ 
-              ...calc, 
-              showAnswer: false, 
-              userAnswer: undefined, 
+            .map((calc) => ({
+              ...calc,
+              showAnswer: false,
+              userAnswer: undefined,
               isCorrect: undefined,
-              skipped: undefined 
+              skipped: undefined,
             }))
             .sort(() => Math.random() - 0.5);
-          
+
           // Update calculations and reset session
-          dispatch({ type: 'SET_CALCULATIONS', payload: shuffledCalculations });
-          dispatch({ type: 'RESET_SESSION' });
-          
+          dispatch({ type: "SET_CALCULATIONS", payload: shuffledCalculations });
+          dispatch({ type: "RESET_SESSION" });
+
           // Set current index from URL if available
-          if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex) {
-            dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+          if (
+            urlState.currentIndex !== undefined &&
+            urlState.currentIndex !== state.currentCalculationIndex
+          ) {
+            dispatch({
+              type: "SET_CURRENT_INDEX",
+              payload: urlState.currentIndex,
+            });
           }
         }
       }, 100);
     }
-    
+
     // Sync current index from URL
-    if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex && state.calculations.length > 0) {
-      dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+    if (
+      urlState.currentIndex !== undefined &&
+      urlState.currentIndex !== state.currentCalculationIndex &&
+      state.calculations.length > 0
+    ) {
+      dispatch({ type: "SET_CURRENT_INDEX", payload: urlState.currentIndex });
     }
   }, []); // Only run once on mount
 
@@ -180,7 +191,7 @@ export default function PracticePhase() {
   const handleSubmitAnswer = (answer: number) => {
     const oldIndex = state.currentCalculationIndex;
     submitAnswer(answer);
-    
+
     // Update URL with new index after submission
     setTimeout(() => {
       if (state.currentCalculationIndex !== oldIndex) {
@@ -245,7 +256,7 @@ export default function PracticePhase() {
                 moveToPhase("test");
               }}
             >
-              Move to Test Phase
+              Go Test Myself!
             </Button>
             <Button
               variant="secondary"
@@ -304,7 +315,7 @@ export default function PracticePhase() {
           {!showMultipleChoice && (
             <div className={styles.questionActions}>
               <Button variant="secondary" size="md" onClick={handleShowAnswer}>
-                Show Answer Options
+                Show Hints
               </Button>
             </div>
           )}
