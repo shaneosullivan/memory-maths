@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Suspense, useEffect, useState } from 'react';
-import { useApp } from '@/contexts/AppContext';
-import { useUrlNavigation } from '@/hooks/useUrlNavigation';
-import ProfileSelector from '@/components/ProfileSelector';
-import Header from '@/components/Header';
-import LearningPhase from '@/components/LearningPhase';
-import PracticePhase from '@/components/PracticePhase';
-import TestPhase from '@/components/TestPhase';
-import styles from './page.module.css';
+import { Suspense, useEffect, useState } from "react";
+import { useApp } from "@/contexts/AppContext";
+import { useUrlNavigation } from "@/hooks/useUrlNavigation";
+import ProfileSelector from "@/components/ProfileSelector";
+import Header from "@/components/Header";
+import LearningPhase from "@/components/LearningPhase";
+import PracticePhase from "@/components/PracticePhase";
+import TestPhase from "@/components/TestPhase";
+import styles from "./page.module.css";
 
 function AppContent() {
   const { state, createProfile } = useApp();
@@ -16,20 +16,20 @@ function AppContent() {
   const urlState = getCurrentState();
 
   // Check if we should auto-create guest profile (synchronously to prevent flash)
-  const shouldAutoCreateGuest = !state.currentProfile && (
-    urlState.profileId === 'guest' || 
-    urlState.operation || 
-    urlState.baseNumber || 
-    urlState.rangeMin || 
-    urlState.phase !== 'learning'
-  );
+  const shouldAutoCreateGuest =
+    !state.currentProfile &&
+    (urlState.profileId === "guest" ||
+      urlState.operation ||
+      urlState.baseNumber ||
+      urlState.rangeMin ||
+      urlState.phase !== "learning");
 
   // Auto-create guest profile when needed
   useEffect(() => {
     if (shouldAutoCreateGuest) {
-      createProfile('Guest', true);
-      if (urlState.profileId !== 'guest') {
-        setProfileId('guest');
+      createProfile("Guest", true);
+      if (urlState.profileId !== "guest") {
+        setProfileId("guest");
       }
     }
   }, [shouldAutoCreateGuest, createProfile, setProfileId, urlState.profileId]);
@@ -47,9 +47,11 @@ function AppContent() {
     <div className={styles.container}>
       <Header />
       <main className={styles.main}>
-        {(!urlState.phase || urlState.phase === 'learning') && <LearningPhase />}
-        {urlState.phase === 'practice' && <PracticePhase />}
-        {urlState.phase === 'test' && <TestPhase />}
+        {(!urlState.phase || urlState.phase === "learning") && (
+          <LearningPhase />
+        )}
+        {urlState.phase === "practice" && <PracticePhase />}
+        {urlState.phase === "test" && <TestPhase />}
       </main>
     </div>
   );
@@ -57,7 +59,7 @@ function AppContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div></div>}>
       <AppContent />
     </Suspense>
   );
