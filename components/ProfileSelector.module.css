@@ -4,11 +4,12 @@
   justify-content: center;
   min-height: 100vh;
   padding: var(--space-6);
-  background: linear-gradient(135deg, 
-    #667eea 0%, 
-    #764ba2 25%, 
-    #f093fb 50%, 
-    #f5576c 75%, 
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 25%,
+    #f093fb 50%,
+    #f5576c 75%,
     #4facfe 100%
   );
   background-size: 400% 400%;
@@ -18,7 +19,7 @@
 }
 
 .container::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -42,7 +43,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -58,8 +60,7 @@
   padding: var(--space-12);
   max-width: 600px;
   width: 100%;
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.15),
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   position: relative;
   z-index: 1;
@@ -67,14 +68,15 @@
 }
 
 .card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.1) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
     rgba(255, 255, 255, 0.05) 100%
   );
   border-radius: inherit;
@@ -97,11 +99,12 @@
   font-weight: 900;
   text-align: center;
   margin-bottom: var(--space-4);
-  background: linear-gradient(135deg, 
-    #667eea 0%, 
-    #764ba2 25%, 
-    #f093fb 50%, 
-    #f5576c 75%, 
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 25%,
+    #f093fb 50%,
+    #f5576c 75%,
     #4facfe 100%
   );
   background-size: 200% 200%;
@@ -115,7 +118,8 @@
 }
 
 @keyframes titleGradient {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -150,7 +154,7 @@
 }
 
 .section h2::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 50%;
@@ -174,8 +178,9 @@
   padding: var(--space-6);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-xl);
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.2) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0.1) 100%
   );
   backdrop-filter: blur(10px);
@@ -186,15 +191,16 @@
 }
 
 .profileButton::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.2), 
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
     transparent
   );
   transition: left 0.5s;
@@ -202,8 +208,7 @@
 
 .profileButton:hover {
   border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.15),
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.2) inset;
   transform: translateY(-2px);
 }
@@ -246,9 +251,7 @@
   outline: none;
   border-color: #667eea;
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 
-    0 0 0 3px rgba(102, 126, 234, 0.1),
-    0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 8px 25px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
 
@@ -278,14 +281,15 @@
 }
 
 .primaryButton::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.2) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0) 100%
   );
   opacity: 0;
@@ -333,8 +337,9 @@
   padding: var(--space-4) var(--space-6);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-xl);
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.1) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
     rgba(255, 255, 255, 0.05) 100%
   );
   backdrop-filter: blur(10px);
@@ -346,8 +351,9 @@
 }
 
 .guestButton:hover {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.2) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0.1) 100%
   );
   border-color: rgba(255, 255, 255, 0.5);
@@ -374,7 +380,8 @@
 }
 
 @keyframes iconPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -404,16 +411,17 @@
 @media (max-width: 768px) {
   .card {
     padding: 24px;
+    margin-bottom: 20px;
   }
-  
+
   .title {
     font-size: 2.8rem;
   }
-  
+
   .mathIcon {
     font-size: 3rem;
   }
-  
+
   .formButtons {
     flex-direction: column;
   }
