@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, ButtonLink } from "@/components/ui";
 import styles from "./Header.module.css";
 
 export default function Header() {
   const { state, switchProfile, deleteProfile } = useApp();
-  const { setProfileId } = useUrlNavigation();
+  const { setProfileId, getCurrentState } = useUrlNavigation();
   const [showDropdown, setShowDropdown] = useState(false);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -59,7 +59,13 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.left}>
-          <h1 className={styles.title}>Memory Maths</h1>
+          <ButtonLink
+            href={`/?phase=learning&profileId=${getCurrentState().profileId || 'guest'}`}
+            variant="ghost"
+            className={styles.titleLink}
+          >
+            <h1 className={styles.title}>Memory Maths</h1>
+          </ButtonLink>
           <div className={styles.phaseIndicator}>
             {state.phase.charAt(0).toUpperCase() + state.phase.slice(1)} Phase
           </div>
