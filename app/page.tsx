@@ -36,7 +36,7 @@ function AppContent() {
 
   // Show loading instead of ProfileSelector when we should auto-create guest
   if (!state.currentProfile && shouldAutoCreateGuest) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   if (!state.currentProfile) {

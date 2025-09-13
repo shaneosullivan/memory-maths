@@ -208,24 +208,22 @@ export default function LearningPhase() {
               <div className={styles.squareOption}>
                 <h3>Practice Type</h3>
                 <div className={styles.practiceTypeButtons}>
-                  <Button
-                    variant={
-                      !urlState.isSquareNumbers ? "primary" : "secondary"
-                    }
-                    size="md"
+                  <button
                     onClick={() => handleSquareNumbersToggle(false)}
-                    className={styles.practiceTypeButton}
+                    className={`${styles.practiceTypeButton} ${
+                      !urlState.isSquareNumbers ? styles.selected : ""
+                    }`}
                   >
-                    Regular Multiplication
-                  </Button>
-                  <Button
-                    variant={urlState.isSquareNumbers ? "primary" : "secondary"}
-                    size="md"
+                    Simple
+                  </button>
+                  <button
                     onClick={() => handleSquareNumbersToggle(true)}
-                    className={styles.practiceTypeButton}
+                    className={`${styles.practiceTypeButton} ${
+                      urlState.isSquareNumbers ? styles.selected : ""
+                    }`}
                   >
                     Square Numbers
-                  </Button>
+                  </button>
                 </div>
                 <p className={styles.practiceTypeDescription}>
                   {urlState.isSquareNumbers
