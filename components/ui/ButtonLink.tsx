@@ -1,18 +1,19 @@
 "use client";
 
-import { ReactNode, ButtonHTMLAttributes } from 'react';
+import { ReactNode, AnchorHTMLAttributes } from 'react';
 import baseStyles from './button-base.module.css';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'glass';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   fullWidth?: boolean;
   icon?: ReactNode;
   children: ReactNode;
   className?: string;
+  disabled?: boolean;
 }
 
-export default function Button({ 
+export default function ButtonLink({ 
   variant = 'primary', 
   size = 'md', 
   fullWidth = false,
@@ -21,8 +22,8 @@ export default function Button({
   className = '',
   disabled,
   ...props 
-}: ButtonProps) {
-  const buttonClass = [
+}: ButtonLinkProps) {
+  const linkClass = [
     baseStyles.buttonBase,
     baseStyles[variant],
     baseStyles[size],
@@ -32,9 +33,9 @@ export default function Button({
   ].filter(Boolean).join(' ');
   
   return (
-    <button className={buttonClass} disabled={disabled} {...props}>
+    <a className={linkClass} {...props}>
       {icon && <span className={baseStyles.icon}>{icon}</span>}
       {children}
-    </button>
+    </a>
   );
 }

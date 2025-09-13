@@ -178,13 +178,13 @@
 }
 
 .multipleChoice {
-  margin-top: var(--space-8);
+  margin-top: var(--space-2);
 }
 
 .multipleChoice p {
   font-size: var(--text-lg);
   font-weight: 600;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-2);
   color: var(--foreground);
 }
 

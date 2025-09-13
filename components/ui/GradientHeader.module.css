@@ -1,6 +1,6 @@
 .header {
   padding: var(--space-10) var(--space-6);
-  margin: 0 auto var(--space-8) auto;
+  margin: var(--space-4) auto var(--space-8) auto;
   max-width: 1000px;
   border-radius: var(--radius-2xl);
   color: white;

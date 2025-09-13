@@ -14,7 +14,13 @@ interface AppContextType {
   setRangeMin: (min: number) => void;
   setRangeMax: (max: number) => void;
   setIsSquareNumbers: (isSquare: boolean) => void;
-  generateCalculations: () => void;
+  generateCalculations: (params?: {
+    operation?: Operation;
+    baseNumber?: number;
+    rangeMin?: number;
+    rangeMax?: number;
+    isSquareNumbers?: boolean;
+  }) => void;
   moveToPhase: (phase: Phase) => void;
   submitAnswer: (answer: number) => void;
   skipQuestion: () => void;
@@ -90,9 +96,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   useEffect(() => {
-    const savedProfile = localStorage.getItem('currentProfile');
-    if (savedProfile) {
-      dispatch({ type: 'SET_PROFILE', payload: JSON.parse(savedProfile) });
+    // Check URL for profile ID first
+    const urlParams = new URLSearchParams(window.location.search);
+    const profileId = urlParams.get('profileId');
+    
+    if (profileId === 'guest') {
+      // Create guest profile automatically
+      const guestProfile: Profile = {
+        id: 'guest',
+        name: 'Guest',
+        isGuest: true,
+        stats: [],
+        createdAt: new Date(),
+        lastUsed: new Date(),
+      };
+      dispatch({ type: 'SET_PROFILE', payload: guestProfile });
+    } else if (profileId) {
+      // Try to find existing profile by ID
+      const profiles = JSON.parse(localStorage.getItem('profiles') || '[]');
+      const profile = profiles.find((p: Profile) => p.id === profileId);
+      if (profile) {
+        dispatch({ type: 'SET_PROFILE', payload: profile });
+      }
+    } else {
+      // Fallback to saved profile
+      const savedProfile = localStorage.getItem('currentProfile');
+      if (savedProfile) {
+        dispatch({ type: 'SET_PROFILE', payload: JSON.parse(savedProfile) });
+      }
     }
   }, []);
 
@@ -167,46 +198,59 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SET_IS_SQUARE_NUMBERS', payload: isSquare });
   };
 
-  const generateCalculations = () => {
-    if (!state.operation) return;
+  const generateCalculations = (params?: {
+    operation?: Operation;
+    baseNumber?: number;
+    rangeMin?: number;
+    rangeMax?: number;
+    isSquareNumbers?: boolean;
+  }) => {
+    // Use params if provided, otherwise fall back to state
+    const operation = params?.operation || state.operation;
+    const baseNumber = params?.baseNumber || state.baseNumber;
+    const rangeMin = params?.rangeMin || state.rangeMin;
+    const rangeMax = params?.rangeMax || state.rangeMax;
+    const isSquareNumbers = params?.isSquareNumbers ?? state.isSquareNumbers;
+    
+    if (!operation) return;
 
     const calculations: Calculation[] = [];
     
-    for (let i = state.rangeMin; i <= state.rangeMax; i++) {
+    for (let i = rangeMin; i <= rangeMax; i++) {
       let operand1: number, operand2: number, answer: number;
       
-      switch (state.operation) {
+      switch (operation) {
         case 'addition':
-          operand1 = state.baseNumber;
+          operand1 = baseNumber;
           operand2 = i;
           answer = operand1 + operand2;
           break;
         case 'subtraction':
-          operand1 = state.baseNumber + i;
+          operand1 = baseNumber + i;
           operand2 = i;
           answer = operand1 - operand2;
           break;
         case 'multiplication':
-          if (state.isSquareNumbers) {
+          if (isSquareNumbers) {
             operand1 = i;
             operand2 = i;
             answer = operand1 * operand2;
           } else {
-            operand1 = state.baseNumber;
+            operand1 = baseNumber;
             operand2 = i;
             answer = operand1 * operand2;
           }
           break;
         case 'division':
-          operand1 = state.baseNumber * i;
-          operand2 = state.baseNumber;
+          operand1 = baseNumber * i;
+          operand2 = baseNumber;
           answer = i;
           break;
       }
 
       calculations.push({
-        id: `${state.operation}-${state.baseNumber}-${i}-${operand1}-${operand2}`,
-        operation: state.operation,
+        id: `${operation}-${baseNumber}-${i}-${operand1}-${operand2}`,
+        operation: operation,
         operand1,
         operand2,
         answer,
@@ -222,10 +266,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'RESET_SESSION' });
     
     if (phase === 'practice' || phase === 'test') {
-      const shuffledCalculations = [...state.calculations]
-        .map(calc => ({ ...calc, showAnswer: false, userAnswer: undefined, isCorrect: undefined }))
-        .sort(() => Math.random() - 0.5);
-      dispatch({ type: 'SET_CALCULATIONS', payload: shuffledCalculations });
+      // Only shuffle if we have calculations, otherwise they'll be generated from URL
+      if (state.calculations.length > 0) {
+        const shuffledCalculations = [...state.calculations]
+          .map(calc => ({ 
+            ...calc, 
+            showAnswer: false, 
+            userAnswer: undefined, 
+            isCorrect: undefined,
+            skipped: undefined 
+          }))
+          .sort(() => Math.random() - 0.5);
+        dispatch({ type: 'SET_CALCULATIONS', payload: shuffledCalculations });
+      }
     }
   };
 

@@ -1,20 +1,103 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Operation } from "@/types";
+import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
 import { GradientHeader, ProgressBar, Button, Card } from "@/components/ui";
 import styles from "./PracticePhase.module.css";
 
 export default function PracticePhase() {
-  const { state, submitAnswer, moveToPhase } = useApp();
+  const {
+    state,
+    dispatch,
+    submitAnswer,
+    moveToPhase,
+    generateCalculations,
+    setOperation,
+    setBaseNumber,
+    setRangeMin,
+    setRangeMax,
+    setIsSquareNumbers,
+  } = useApp();
+  const { navigateToPhase, getCurrentState, setCurrentIndex } = useUrlNavigation();
   const [currentInput, setCurrentInput] = useState("");
   const [showMultipleChoice, setShowMultipleChoice] = useState(false);
   const [multipleChoiceOptions, setMultipleChoiceOptions] = useState<number[]>(
     []
   );
+
+  // Sync AppContext with URL state when component mounts
+  useEffect(() => {
+    const urlState = getCurrentState();
+
+    // If URL has parameters but AppContext doesn't, sync them
+    if (urlState.operation && !state.operation) {
+      setOperation(urlState.operation);
+    }
+    if (urlState.baseNumber && urlState.baseNumber !== state.baseNumber) {
+      setBaseNumber(urlState.baseNumber);
+    }
+    if (urlState.rangeMin && urlState.rangeMin !== state.rangeMin) {
+      setRangeMin(urlState.rangeMin);
+    }
+    if (urlState.rangeMax && urlState.rangeMax !== state.rangeMax) {
+      setRangeMax(urlState.rangeMax);
+    }
+    if (
+      urlState.isSquareNumbers !== undefined &&
+      urlState.isSquareNumbers !== state.isSquareNumbers
+    ) {
+      setIsSquareNumbers(urlState.isSquareNumbers);
+    }
+
+    // If we have all the URL parameters but no calculations, generate them
+    if (
+      urlState.operation &&
+      urlState.rangeMin &&
+      urlState.rangeMax &&
+      state.calculations.length === 0
+    ) {
+      generateCalculations({
+        operation: urlState.operation,
+        baseNumber: urlState.baseNumber || state.baseNumber || 2,
+        rangeMin: urlState.rangeMin,
+        rangeMax: urlState.rangeMax,
+        isSquareNumbers: urlState.isSquareNumbers || false,
+      });
+      
+      // Shuffle calculations for practice phase after generation
+      setTimeout(() => {
+        if (state.calculations.length > 0) {
+          const shuffledCalculations = [...state.calculations]
+            .map(calc => ({ 
+              ...calc, 
+              showAnswer: false, 
+              userAnswer: undefined, 
+              isCorrect: undefined,
+              skipped: undefined 
+            }))
+            .sort(() => Math.random() - 0.5);
+          
+          // Update calculations and reset session
+          dispatch({ type: 'SET_CALCULATIONS', payload: shuffledCalculations });
+          dispatch({ type: 'RESET_SESSION' });
+          
+          // Set current index from URL if available
+          if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex) {
+            dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+          }
+        }
+      }, 100);
+    }
+    
+    // Sync current index from URL
+    if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex && state.calculations.length > 0) {
+      dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+    }
+  }, []); // Only run once on mount
 
   const currentCalculation = state.calculations[state.currentCalculationIndex];
   const isComplete = state.calculations.every(
@@ -47,7 +130,7 @@ export default function PracticePhase() {
     } else if (value === "enter") {
       if (currentInput) {
         const answer = parseFloat(currentInput);
-        submitAnswer(answer);
+        handleSubmitAnswer(answer);
         setCurrentInput("");
         setShowMultipleChoice(false);
       }
@@ -66,13 +149,20 @@ export default function PracticePhase() {
 
     const correctAnswer = currentCalculation.answer;
     const options = new Set([correctAnswer]);
+    const isDivision = currentCalculation.operation === "division";
 
     // Generate similar numbers
     const range = Math.max(5, Math.abs(correctAnswer * 0.2));
 
     while (options.size < 4) {
       const variation = Math.floor(Math.random() * range * 2) - range;
-      const option = correctAnswer + variation;
+      let option = correctAnswer + variation;
+
+      // For non-division operations, ensure options are whole numbers
+      if (!isDivision) {
+        option = Math.round(option);
+      }
+
       if (option > 0 && option !== correctAnswer) {
         options.add(option);
       }
@@ -87,14 +177,22 @@ export default function PracticePhase() {
     setShowMultipleChoice(true);
   };
 
-  const handleMultipleChoiceSelect = (answer: number) => {
+  const handleSubmitAnswer = (answer: number) => {
+    const oldIndex = state.currentCalculationIndex;
     submitAnswer(answer);
-    setShowMultipleChoice(false);
-    setCurrentInput("");
+    
+    // Update URL with new index after submission
+    setTimeout(() => {
+      if (state.currentCalculationIndex !== oldIndex) {
+        setCurrentIndex(state.currentCalculationIndex);
+      }
+    }, 50);
   };
 
-  const handleMoveToTest = () => {
-    moveToPhase("test");
+  const handleMultipleChoiceSelect = (answer: number) => {
+    handleSubmitAnswer(answer);
+    setShowMultipleChoice(false);
+    setCurrentInput("");
   };
 
   if (!currentCalculation && !isComplete) {
@@ -103,7 +201,7 @@ export default function PracticePhase() {
         <div className={styles.error}>
           <h2>No calculations available</h2>
           <p>Please go back to the Learning Phase to generate calculations.</p>
-          <BackButton onClick={() => moveToPhase("learning")}>
+          <BackButton fallbackPath="?phase=learning">
             Back to Learning
           </BackButton>
         </div>
@@ -139,13 +237,23 @@ export default function PracticePhase() {
             </div>
           </div>
           <div className={styles.actions}>
-            <Button variant="primary" size="lg" onClick={handleMoveToTest}>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => {
+                navigateToPhase("test");
+                moveToPhase("test");
+              }}
+            >
               Move to Test Phase
             </Button>
             <Button
               variant="secondary"
               size="lg"
-              onClick={() => moveToPhase("practice")}
+              onClick={() => {
+                navigateToPhase("practice");
+                moveToPhase("practice");
+              }}
             >
               Practice Again
             </Button>
@@ -173,8 +281,12 @@ export default function PracticePhase() {
       </GradientHeader>
 
       <div className={styles.content}>
-        <Card variant="elevated" padding="lg" className={styles.questionSection}>
-          <BackButton onClick={() => moveToPhase("learning")} />
+        <Card
+          variant="elevated"
+          padding="lg"
+          className={styles.questionSection}
+        >
+          <BackButton />
           <div className={styles.question}>
             <span className={styles.operand}>
               {currentCalculation.operand1}
@@ -191,11 +303,7 @@ export default function PracticePhase() {
 
           {!showMultipleChoice && (
             <div className={styles.questionActions}>
-              <Button
-                variant="secondary"
-                size="md"
-                onClick={handleShowAnswer}
-              >
+              <Button variant="secondary" size="md" onClick={handleShowAnswer}>
                 Show Answer Options
               </Button>
             </div>
@@ -203,7 +311,7 @@ export default function PracticePhase() {
 
           {showMultipleChoice && (
             <div className={styles.multipleChoice}>
-              <p>Choose the correct answer:</p>
+              <p>Hint:</p>
               <div className={styles.choiceButtons}>
                 {multipleChoiceOptions.map((option, index) => (
                   <Button

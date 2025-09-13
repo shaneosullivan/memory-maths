@@ -1,16 +1,92 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Operation } from "@/types";
+import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
 import { GradientHeader, ProgressBar, Button, Card } from "@/components/ui";
 import styles from "./TestPhase.module.css";
 
 export default function TestPhase() {
-  const { state, submitAnswer, skipQuestion, moveToPhase } = useApp();
+  const { 
+    state, 
+    dispatch,
+    submitAnswer, 
+    skipQuestion, 
+    moveToPhase,
+    generateCalculations,
+    setOperation,
+    setBaseNumber,
+    setRangeMin,
+    setRangeMax,
+    setIsSquareNumbers
+  } = useApp();
+  const { navigateToPhase, clearUrlState, getCurrentState, setCurrentIndex } = useUrlNavigation();
   const [currentInput, setCurrentInput] = useState("");
+
+  // Sync AppContext with URL state when component mounts
+  useEffect(() => {
+    const urlState = getCurrentState();
+    
+    // If URL has parameters but AppContext doesn't, sync them
+    if (urlState.operation && !state.operation) {
+      setOperation(urlState.operation);
+    }
+    if (urlState.baseNumber && urlState.baseNumber !== state.baseNumber) {
+      setBaseNumber(urlState.baseNumber);
+    }
+    if (urlState.rangeMin && urlState.rangeMin !== state.rangeMin) {
+      setRangeMin(urlState.rangeMin);
+    }
+    if (urlState.rangeMax && urlState.rangeMax !== state.rangeMax) {
+      setRangeMax(urlState.rangeMax);
+    }
+    if (urlState.isSquareNumbers !== undefined && urlState.isSquareNumbers !== state.isSquareNumbers) {
+      setIsSquareNumbers(urlState.isSquareNumbers);
+    }
+    
+    // If we have all the URL parameters but no calculations, generate them
+    if (urlState.operation && urlState.rangeMin && urlState.rangeMax && state.calculations.length === 0) {
+      generateCalculations({
+        operation: urlState.operation,
+        baseNumber: urlState.baseNumber || state.baseNumber || 2,
+        rangeMin: urlState.rangeMin,
+        rangeMax: urlState.rangeMax,
+        isSquareNumbers: urlState.isSquareNumbers || false,
+      });
+      
+      // Shuffle calculations for test phase after generation
+      setTimeout(() => {
+        if (state.calculations.length > 0) {
+          const shuffledCalculations = [...state.calculations]
+            .map(calc => ({ 
+              ...calc, 
+              showAnswer: false, 
+              userAnswer: undefined, 
+              isCorrect: undefined,
+              skipped: undefined 
+            }))
+            .sort(() => Math.random() - 0.5);
+          
+          // Update calculations and reset session
+          dispatch({ type: 'SET_CALCULATIONS', payload: shuffledCalculations });
+          dispatch({ type: 'RESET_SESSION' });
+          
+          // Set current index from URL if available
+          if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex) {
+            dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+          }
+        }
+      }, 100);
+    }
+    
+    // Sync current index from URL
+    if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex && state.calculations.length > 0) {
+      dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+    }
+  }, []); // Only run once on mount
 
   const currentCalculation = state.calculations[state.currentCalculationIndex];
   const isComplete = state.calculations.every(
@@ -37,13 +113,37 @@ export default function TestPhase() {
     }
   };
 
+  const handleSubmitAnswer = (answer: number) => {
+    const oldIndex = state.currentCalculationIndex;
+    submitAnswer(answer);
+    
+    // Update URL with new index after submission
+    setTimeout(() => {
+      if (state.currentCalculationIndex !== oldIndex) {
+        setCurrentIndex(state.currentCalculationIndex);
+      }
+    }, 50);
+  };
+
+  const handleSkipQuestion = () => {
+    const oldIndex = state.currentCalculationIndex;
+    skipQuestion();
+    
+    // Update URL with new index after skipping
+    setTimeout(() => {
+      if (state.currentCalculationIndex !== oldIndex) {
+        setCurrentIndex(state.currentCalculationIndex);
+      }
+    }, 50);
+  };
+
   const handleKeypadInput = (value: string) => {
     if (value === "delete") {
       setCurrentInput(currentInput.slice(0, -1));
     } else if (value === "enter") {
       if (currentInput) {
         const answer = parseFloat(currentInput);
-        submitAnswer(answer);
+        handleSubmitAnswer(answer);
         setCurrentInput("");
       }
     } else if (value === ".") {
@@ -57,12 +157,14 @@ export default function TestPhase() {
   };
 
   const handleSkip = () => {
-    skipQuestion();
+    handleSkipQuestion();
     setCurrentInput("");
   };
 
   const handleBackToLearning = () => {
     moveToPhase("learning");
+    // Clear all URL parameters for a fresh start
+    clearUrlState();
   };
 
   if (!currentCalculation && !isComplete) {
@@ -71,7 +173,7 @@ export default function TestPhase() {
         <div className={styles.error}>
           <h2>No calculations available</h2>
           <p>Please go back to the Learning Phase to generate calculations.</p>
-          <BackButton onClick={handleBackToLearning}>
+          <BackButton fallbackPath="?phase=learning">
             Back to Learning
           </BackButton>
         </div>
@@ -147,7 +249,7 @@ export default function TestPhase() {
           <div className={styles.breakdown}>
             <h3>Question Breakdown</h3>
             <div className={styles.questionList}>
-              {state.calculations.map((calc, index) => (
+              {state.calculations.map((calc) => (
                 <div
                   key={`test_calc_${calc.id}`}
                   className={`${styles.questionItem} ${
@@ -183,7 +285,10 @@ export default function TestPhase() {
             <Button
               variant="secondary"
               size="lg"
-              onClick={() => moveToPhase("test")}
+              onClick={() => {
+                navigateToPhase("test");
+                moveToPhase("test");
+              }}
             >
               Retry Test
             </Button>
@@ -212,7 +317,7 @@ export default function TestPhase() {
 
       <div className={styles.content}>
         <Card variant="elevated" padding="lg" className={styles.questionSection}>
-          <BackButton onClick={() => moveToPhase("learning")} />
+          <BackButton />
           <div className={styles.question}>
             <span className={styles.operand}>
               {currentCalculation.operand1}

@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
+import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
 import { Card, Button, Input } from "@/components/ui";
 import styles from "./ProfileSelector.module.css";
 
 export default function ProfileSelector() {
   const { createProfile, switchProfile } = useApp();
+  const { setProfileId } = useUrlNavigation();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newProfileName, setNewProfileName] = useState("");
@@ -20,6 +22,7 @@ export default function ProfileSelector() {
   const handleCreateProfile = () => {
     if (newProfileName.trim()) {
       createProfile(newProfileName.trim());
+      setProfileId(Date.now().toString()); // Use timestamp as simple ID
       setNewProfileName("");
       setShowCreateForm(false);
     }
@@ -27,6 +30,12 @@ export default function ProfileSelector() {
 
   const handleUseGuest = () => {
     createProfile("Guest", true);
+    setProfileId("guest");
+  };
+
+  const handleSwitchProfile = (profile: Profile) => {
+    switchProfile(profile);
+    setProfileId(profile.id);
   };
 
   return (
@@ -48,7 +57,7 @@ export default function ProfileSelector() {
                 <button
                   key={`profile_${profile.id}`}
                   className={styles.profileButton}
-                  onClick={() => switchProfile(profile)}
+                  onClick={() => handleSwitchProfile(profile)}
                 >
                   <div>
                     <div className={styles.profileName}>{profile.name}</div>

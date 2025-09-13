@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
+import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
 import { Button, Input } from "@/components/ui";
 import styles from "./Header.module.css";
 
 export default function Header() {
   const { state, switchProfile, deleteProfile } = useApp();
+  const { setProfileId } = useUrlNavigation();
   const [showDropdown, setShowDropdown] = useState(false);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -34,6 +36,7 @@ export default function Header() {
       localStorage.setItem("profiles", JSON.stringify(updatedProfiles));
 
       switchProfile(profile);
+      setProfileId(profile.id);
       setNewProfileName("");
       setShowCreateForm(false);
       setShowDropdown(false);
@@ -48,6 +51,7 @@ export default function Header() {
 
   const handleSwitchProfile = (profile: Profile) => {
     switchProfile(profile);
+    setProfileId(profile.id);
     setShowDropdown(false);
   };
 
