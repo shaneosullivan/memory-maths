@@ -1,0 +1,32 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="192" height="192" rx="24" fill="#0066ff"/>
+  
+  <!-- Grid lines (subtle) -->
+  <line x1="96" y1="32" x2="96" y2="160" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <line x1="32" y1="96" x2="160" y2="96" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  
+  <!-- Plus symbol (top-left) -->
+  <g transform="translate(64, 64)">
+    <line x1="0" y1="-12" x2="0" y2="12" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    <line x1="-12" y1="0" x2="12" y2="0" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Minus symbol (top-right) -->
+  <g transform="translate(128, 64)">
+    <line x1="-12" y1="0" x2="12" y2="0" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Multiply symbol (bottom-left) -->
+  <g transform="translate(64, 128)">
+    <line x1="-8" y1="-8" x2="8" y2="8" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    <line x1="8" y1="-8" x2="-8" y2="8" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Divide symbol (bottom-right) -->
+  <g transform="translate(128, 128)">
+    <circle cx="0" cy="-6" r="2.5" fill="white"/>
+    <line x1="-10" y1="0" x2="10" y2="0" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="6" r="2.5" fill="white"/>
+  </g>
+</svg>

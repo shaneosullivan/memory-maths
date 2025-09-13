@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/contexts/AppContext";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Memory Maths",
   description: "Practice and improve your mental arithmetic skills with Learning, Practice, and Test phases",
+  manifest: "/manifest.json",
+  themeColor: "#0066ff",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 };
 
 export default function RootLayout({
@@ -25,10 +29,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0066ff" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Memory Maths" />
+        <link rel="apple-touch-icon" href="/icon-192.svg" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AppProvider>
           {children}
         </AppProvider>
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );
