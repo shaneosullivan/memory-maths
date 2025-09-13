@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Profile } from "@/types";
+import { Button, Input } from "@/components/ui";
 import styles from "./Header.module.css";
 
 export default function Header() {
@@ -74,7 +75,8 @@ export default function Header() {
               <div className={styles.dropdown}>
                 {profiles.map((profile) => (
                   <div key={profile.id} className={styles.profileItem}>
-                    <button
+                    <Button
+                      variant="ghost"
                       className={styles.profileOption}
                       onClick={() => handleSwitchProfile(profile)}
                     >
@@ -84,14 +86,16 @@ export default function Header() {
                           {profile.stats.length} sessions
                         </div>
                       </div>
-                    </button>
+                    </Button>
                     {!profile.isGuest && (
-                      <button
+                      <Button
+                        variant="danger"
+                        size="sm"
                         className={styles.deleteButton}
                         onClick={() => handleDeleteProfile(profile.id)}
                       >
                         ×
-                      </button>
+                      </Button>
                     )}
                   </div>
                 ))}
@@ -99,43 +103,48 @@ export default function Header() {
                 {/* <div className={styles.dropdownSeparator} /> */}
 
                 {!showCreateForm ? (
-                  <button
-                    className={styles.createButton}
+                  <Button
+                    variant="primary"
+                    size="md"
+                    fullWidth
                     onClick={() => setShowCreateForm(true)}
+                    icon="+"
+                    className={styles.createButton}
                   >
-                    <span className={styles.createIcon}>+</span>
                     Create New Profile
-                  </button>
+                  </Button>
                 ) : (
                   <div className={styles.createForm}>
-                    <input
-                      type="text"
+                    <Input
+                      size="md"
+                      fullWidth
                       placeholder="Enter your name..."
                       value={newProfileName}
                       onChange={(e) => setNewProfileName(e.target.value)}
-                      className={styles.nameInput}
-                      onKeyPress={(e) =>
+                      onKeyDown={(e) =>
                         e.key === "Enter" && handleCreateProfile()
                       }
                       autoFocus
                     />
                     <div className={styles.formButtons}>
-                      <button
-                        className={styles.saveButton}
+                      <Button
+                        variant="primary"
+                        size="sm"
                         onClick={handleCreateProfile}
                         disabled={!newProfileName.trim()}
                       >
                         Create
-                      </button>
-                      <button
-                        className={styles.cancelButton}
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
                         onClick={() => {
                           setShowCreateForm(false);
                           setNewProfileName("");
                         }}
                       >
                         Cancel
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
+import { Card } from '@/components/ui';
 import styles from './DualRangeSlider.module.css';
 
 interface DualRangeSliderProps {
@@ -93,7 +94,7 @@ export default function DualRangeSlider({
   const maxPos = getPositionFromValue(valueMax);
 
   return (
-    <div className={styles.container}>
+    <Card variant="default" padding="lg" className={styles.container}>
       <div className={styles.sliderWrapper}>
         <div className={styles.slider} ref={sliderRef}>
           <div className={styles.track} />
@@ -125,6 +126,6 @@ export default function DualRangeSlider({
       <div className={styles.info}>
         Range: {valueMin} to {valueMax} ({valueMax - valueMin + 1} calculations)
       </div>
-    </div>
+    </Card>
   );
 }

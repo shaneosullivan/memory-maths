@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui";
 import styles from "./Keypad.module.css";
 
 interface KeypadProps {
@@ -19,10 +20,16 @@ export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
     onInput(key);
   };
 
+  const getKeyVariant = (key: string) => {
+    if (key === "enter") return "primary";
+    if (key === "delete") return "danger";
+    return "secondary";
+  };
+
   const getKeyClassName = (key: string) => {
-    if (key === "enter") return `${styles.key} ${styles.enterKey}`;
-    if (key === "delete") return `${styles.key} ${styles.deleteKey}`;
-    return styles.key;
+    if (key === "enter") return styles.enterKey;
+    if (key === "delete") return styles.deleteKey;
+    return styles.numberKey;
   };
 
   const getKeyLabel = (key: string) => {
@@ -45,13 +52,14 @@ export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
               );
             }
             return (
-              <button
+              <Button
                 key={`keypad_key_${key}`}
-                className={getKeyClassName(key)}
+                variant={getKeyVariant(key) as any}
                 onClick={() => handleKeyPress(key)}
+                className={getKeyClassName(key)}
               >
                 {getKeyLabel(key)}
-              </button>
+              </Button>
             );
           })}
         </div>

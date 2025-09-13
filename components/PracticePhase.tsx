@@ -5,6 +5,7 @@ import { useApp } from "@/contexts/AppContext";
 import { Operation } from "@/types";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
+import { GradientHeader, ProgressBar, Button, Card } from "@/components/ui";
 import styles from "./PracticePhase.module.css";
 
 export default function PracticePhase() {
@@ -138,15 +139,16 @@ export default function PracticePhase() {
             </div>
           </div>
           <div className={styles.actions}>
-            <button className={styles.testButton} onClick={handleMoveToTest}>
+            <Button variant="primary" size="lg" onClick={handleMoveToTest}>
               Move to Test Phase
-            </button>
-            <button
-              className={styles.retryButton}
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
               onClick={() => moveToPhase("practice")}
             >
               Practice Again
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -155,66 +157,23 @@ export default function PracticePhase() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>Practice Phase</h2>
+      <GradientHeader variant="practice" title="Practice Phase">
         <div className={styles.progress}>
-          <div className={styles.progressBar}>
-            {correctCount <= incorrectCount ? (
-              <>
-                <div
-                  className={`${styles.progressCorrect} ${styles.progressLeft}`}
-                  style={{
-                    width: `${
-                      (correctCount / state.calculations.length) * 100
-                    }%`,
-                  }}
-                />
-                <div
-                  className={`${styles.progressIncorrect} ${styles.progressRight}`}
-                  style={{
-                    width: `${
-                      (incorrectCount / state.calculations.length) * 100
-                    }%`,
-                    left: `${
-                      (correctCount / state.calculations.length) * 100
-                    }%`,
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <div
-                  className={`${styles.progressIncorrect} ${styles.progressLeft}`}
-                  style={{
-                    width: `${
-                      (incorrectCount / state.calculations.length) * 100
-                    }%`,
-                  }}
-                />
-                <div
-                  className={`${styles.progressCorrect} ${styles.progressRight}`}
-                  style={{
-                    width: `${
-                      (correctCount / state.calculations.length) * 100
-                    }%`,
-                    left: `${
-                      (incorrectCount / state.calculations.length) * 100
-                    }%`,
-                  }}
-                />
-              </>
-            )}
-          </div>
+          <ProgressBar
+            correctCount={correctCount}
+            incorrectCount={incorrectCount}
+            totalCount={state.calculations.length}
+          />
           <div className={styles.progressText}>
             {completedCount} / {state.calculations.length} ({correctCount}{" "}
             correct, {incorrectCount} incorrect)
           </div>
         </div>
         <div className={styles.mistakes}>Mistakes: {state.sessionMistakes}</div>
-      </div>
+      </GradientHeader>
 
       <div className={styles.content}>
-        <div className={styles.questionSection}>
+        <Card variant="elevated" padding="lg" className={styles.questionSection}>
           <BackButton onClick={() => moveToPhase("learning")} />
           <div className={styles.question}>
             <span className={styles.operand}>
@@ -232,12 +191,13 @@ export default function PracticePhase() {
 
           {!showMultipleChoice && (
             <div className={styles.questionActions}>
-              <button
-                className={styles.showAnswerButton}
+              <Button
+                variant="secondary"
+                size="md"
                 onClick={handleShowAnswer}
               >
                 Show Answer Options
-              </button>
+              </Button>
             </div>
           )}
 
@@ -246,25 +206,27 @@ export default function PracticePhase() {
               <p>Choose the correct answer:</p>
               <div className={styles.choiceButtons}>
                 {multipleChoiceOptions.map((option, index) => (
-                  <button
+                  <Button
                     key={`multi_choice_${index}`}
-                    className={styles.choiceButton}
+                    variant="secondary"
+                    size="lg"
                     onClick={() => handleMultipleChoiceSelect(option)}
+                    className={styles.choiceButton}
                   >
                     {option}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
           )}
-        </div>
+        </Card>
 
-        <div className={styles.keypadSection}>
+        <Card variant="elevated" padding="md" className={styles.keypadSection}>
           <Keypad
             onInput={handleKeypadInput}
             showDecimal={state.operation === "division"}
           />
-        </div>
+        </Card>
       </div>
     </div>
   );

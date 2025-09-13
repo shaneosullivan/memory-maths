@@ -1,9 +1,9 @@
 .container {
-  padding: 20px 0;
+  padding: 20px 16px;
 }
 
 .sliderWrapper {
-  padding: 30px 20px 20px;
+  padding: 50px 20px 20px;
   position: relative;
 }
 
@@ -78,7 +78,7 @@
 }
 
 .handleLabel::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -97,26 +97,26 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 20px 0;
+    padding: 20px 16px;
     margin-top: 20px;
   }
-  
+
   .sliderWrapper {
-    padding: 40px 20px 30px;
+    padding: 60px 20px 30px;
   }
-  
+
   .handle {
     width: 40px;
     height: 40px;
     border-width: 4px;
   }
-  
+
   .handleLabel {
     padding: 8px 14px;
     font-size: 16px;
     top: -50px;
   }
-  
+
   .info {
     font-size: 18px;
   }

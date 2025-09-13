@@ -5,6 +5,7 @@ import { useApp } from "@/contexts/AppContext";
 import { Operation } from "@/types";
 import DualRangeSlider from "@/components/DualRangeSlider";
 import BackButton from "@/components/BackButton";
+import { GradientHeader, NumberGrid, Button, Card } from "@/components/ui";
 import styles from "./LearningPhase.module.css";
 
 type Step = "operation" | "baseNumber" | "range" | "practice";
@@ -88,10 +89,11 @@ export default function LearningPhase() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>{getStepTitle()}</h2>
-        <p>{getStepDescription()}</p>
-      </div>
+      <GradientHeader
+        variant="learning"
+        title={getStepTitle()}
+        subtitle={getStepDescription()}
+      />
 
       <div className={styles.stepContainer}>
         {currentStep === "operation" && (
@@ -121,22 +123,22 @@ export default function LearningPhase() {
               <div className={styles.squareOption}>
                 <h3>Practice Type</h3>
                 <div className={styles.practiceTypeButtons}>
-                  <button
-                    className={`${styles.practiceTypeButton} ${
-                      !state.isSquareNumbers ? styles.selected : ""
-                    }`}
+                  <Button
+                    variant={!state.isSquareNumbers ? "primary" : "secondary"}
+                    size="md"
                     onClick={() => setIsSquareNumbers(false)}
+                    className={styles.practiceTypeButton}
                   >
                     Regular Multiplication
-                  </button>
-                  <button
-                    className={`${styles.practiceTypeButton} ${
-                      state.isSquareNumbers ? styles.selected : ""
-                    }`}
+                  </Button>
+                  <Button
+                    variant={state.isSquareNumbers ? "primary" : "secondary"}
+                    size="md"
                     onClick={() => setIsSquareNumbers(true)}
+                    className={styles.practiceTypeButton}
                   >
                     Square Numbers
-                  </button>
+                  </Button>
                 </div>
                 <p className={styles.practiceTypeDescription}>
                   {state.isSquareNumbers
@@ -147,29 +149,24 @@ export default function LearningPhase() {
             )}
 
             {!state.isSquareNumbers && (
-              <div className={styles.numberButtons}>
-                {Array.from({ length: 19 }, (_, i) => i + 2).map((num) => (
-                  <button
-                    key={`base_num_${num}`}
-                    className={`${styles.numberButton} ${
-                      state.baseNumber === num ? styles.selected : ""
-                    }`}
-                    onClick={() => handleBaseNumberChange(num)}
-                  >
-                    <span>{num}</span>
-                  </button>
-                ))}
-              </div>
+              <NumberGrid
+                numbers={Array.from({ length: 19 }, (_, i) => i + 2)}
+                selectedValue={state.baseNumber}
+                onSelect={(num) => handleBaseNumberChange(num as number)}
+                columns={8}
+                className={styles.numberButtons}
+              />
             )}
 
             {state.isSquareNumbers && (
               <div className={styles.stepActions}>
-                <button
-                  className={styles.continueButton}
+                <Button
+                  variant="primary"
+                  size="lg"
                   onClick={() => setCurrentStep("range")}
                 >
                   Continue to Range Selection
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -187,12 +184,9 @@ export default function LearningPhase() {
               onMaxChange={setRangeMax}
             />
             <div className={styles.stepActions}>
-              <button
-                className={styles.continueButton}
-                onClick={handleRangeConfirm}
-              >
+              <Button variant="primary" size="lg" onClick={handleRangeConfirm}>
                 Generate Calculations
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -215,12 +209,13 @@ export default function LearningPhase() {
                 When you are happy that you know all these answers well, click
                 the button below
               </p>
-              <button
-                className={styles.practiceButton}
+              <Button
+                variant="primary"
+                size="xl"
                 onClick={() => moveToPhase("practice")}
               >
                 Move to Practice Phase
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -262,7 +257,12 @@ function CalculationCard({
   };
 
   return (
-    <div className={styles.calculationCard} onClick={toggleAnswer}>
+    <Card
+      variant="elevated"
+      padding="md"
+      className={styles.calculationCard}
+      onClick={toggleAnswer}
+    >
       <div className={styles.calculation}>
         {calculation.operand1} {getOperationSymbol(calculation.operation)}{" "}
         {calculation.operand2}
@@ -271,6 +271,6 @@ function CalculationCard({
       <div className={styles.answer}>
         {calculation.showAnswer ? calculation.answer : "?"}
       </div>
-    </div>
+    </Card>
   );
 }

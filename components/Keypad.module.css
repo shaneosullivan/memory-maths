@@ -159,3 +159,33 @@
     font-size: var(--text-sm);
   }
 }
+
+/* Override styles for Button component usage */
+.numberKey,
+.enterKey,
+.deleteKey {
+  width: 100% !important;
+  aspect-ratio: 1;
+  font-size: var(--text-2xl) !important;
+  font-weight: 700 !important;
+}
+
+@media (max-width: 768px) {
+  .numberKey,
+  .enterKey,
+  .deleteKey {
+    font-size: var(--text-xl) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .numberKey {
+    font-size: var(--text-lg) !important;
+  }
+  .enterKey {
+    font-size: var(--text-base) !important;
+  }
+  .deleteKey {
+    font-size: var(--text-sm) !important;
+  }
+}
