@@ -56,18 +56,16 @@ export default function TestPhase() {
       setIsSquareNumbers(urlState.isSquareNumbers);
     }
 
-    // If we have all the URL parameters but no calculations, generate them
+    // If we have operation but no calculations, generate them (use defaults for missing ranges)
     if (
       urlState.operation &&
-      urlState.rangeMin &&
-      urlState.rangeMax &&
       state.calculations.length === 0
     ) {
       generateCalculations({
         operation: urlState.operation,
         baseNumber: urlState.baseNumber || state.baseNumber || 2,
-        rangeMin: urlState.rangeMin,
-        rangeMax: urlState.rangeMax,
+        rangeMin: urlState.rangeMin || 2,
+        rangeMax: urlState.rangeMax || 10,
         isSquareNumbers: urlState.isSquareNumbers || false,
       });
 
@@ -113,7 +111,7 @@ export default function TestPhase() {
   }, []); // Only run once on mount
 
   const currentCalculation = state.calculations[state.currentCalculationIndex];
-  const isComplete = state.calculations.every(
+  const isComplete = state.calculations.length > 0 && state.calculations.every(
     (calc) => calc.userAnswer !== undefined || calc.skipped
   );
   const completedCount = state.calculations.filter(
