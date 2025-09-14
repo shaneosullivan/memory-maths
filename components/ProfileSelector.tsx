@@ -6,6 +6,8 @@ import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
 import { Card, Button, Input } from "@/components/ui";
 import styles from "./ProfileSelector.module.css";
+import { LOCAL_STORAGE_PROFILES_KEY } from "@/lib/consts";
+import { localStorage } from "@/utils/storage";
 
 export default function ProfileSelector() {
   const { createProfile, switchProfile } = useApp();
@@ -15,7 +17,7 @@ export default function ProfileSelector() {
   const [newProfileName, setNewProfileName] = useState("");
 
   useEffect(() => {
-    const savedProfiles = JSON.parse(localStorage.getItem("profiles") || "[]");
+    const savedProfiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
     setProfiles(savedProfiles);
   }, []);
 
@@ -45,7 +47,8 @@ export default function ProfileSelector() {
           <div className={styles.mathIcon}>∑</div>
           <h1 className={styles.title}>Memory Maths</h1>
           <p className={styles.subtitle}>
-            Master arithmetic through memory training and unlock your mathematical potential
+            Master arithmetic through memory training and unlock your
+            mathematical potential
           </p>
         </div>
 

@@ -2,34 +2,40 @@
 
 import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
-import { Operation } from "@/types";
+import { Operation, Profile } from "@/types";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
 import { GradientHeader, ProgressBar, Button, Card } from "@/components/ui";
 import styles from "./TestPhase.module.css";
+import {
+  LOCAL_STORAGE_CURRENT_PROFILE_KEY,
+  LOCAL_STORAGE_PROFILES_KEY,
+} from "@/lib/consts";
+import { localStorage } from "@/utils/storage";
 
 export default function TestPhase() {
-  const { 
-    state, 
+  const {
+    state,
     dispatch,
-    submitAnswer, 
-    skipQuestion, 
+    submitAnswer,
+    skipQuestion,
     moveToPhase,
     generateCalculations,
     setOperation,
     setBaseNumber,
     setRangeMin,
     setRangeMax,
-    setIsSquareNumbers
+    setIsSquareNumbers,
   } = useApp();
-  const { navigateToPhase, clearUrlState, getCurrentState, setCurrentIndex } = useUrlNavigation();
+  const { navigateToPhase, clearUrlState, getCurrentState, setCurrentIndex } =
+    useUrlNavigation();
   const [currentInput, setCurrentInput] = useState("");
 
   // Sync AppContext with URL state when component mounts
   useEffect(() => {
     const urlState = getCurrentState();
-    
+
     // If URL has parameters but AppContext doesn't, sync them
     if (urlState.operation && !state.operation) {
       setOperation(urlState.operation);
@@ -43,12 +49,20 @@ export default function TestPhase() {
     if (urlState.rangeMax && urlState.rangeMax !== state.rangeMax) {
       setRangeMax(urlState.rangeMax);
     }
-    if (urlState.isSquareNumbers !== undefined && urlState.isSquareNumbers !== state.isSquareNumbers) {
+    if (
+      urlState.isSquareNumbers !== undefined &&
+      urlState.isSquareNumbers !== state.isSquareNumbers
+    ) {
       setIsSquareNumbers(urlState.isSquareNumbers);
     }
-    
+
     // If we have all the URL parameters but no calculations, generate them
-    if (urlState.operation && urlState.rangeMin && urlState.rangeMax && state.calculations.length === 0) {
+    if (
+      urlState.operation &&
+      urlState.rangeMin &&
+      urlState.rangeMax &&
+      state.calculations.length === 0
+    ) {
       generateCalculations({
         operation: urlState.operation,
         baseNumber: urlState.baseNumber || state.baseNumber || 2,
@@ -56,35 +70,45 @@ export default function TestPhase() {
         rangeMax: urlState.rangeMax,
         isSquareNumbers: urlState.isSquareNumbers || false,
       });
-      
+
       // Shuffle calculations for test phase after generation
       setTimeout(() => {
         if (state.calculations.length > 0) {
           const shuffledCalculations = [...state.calculations]
-            .map(calc => ({ 
-              ...calc, 
-              showAnswer: false, 
-              userAnswer: undefined, 
+            .map((calc) => ({
+              ...calc,
+              showAnswer: false,
+              userAnswer: undefined,
               isCorrect: undefined,
-              skipped: undefined 
+              skipped: undefined,
             }))
             .sort(() => Math.random() - 0.5);
-          
+
           // Update calculations and reset session
-          dispatch({ type: 'SET_CALCULATIONS', payload: shuffledCalculations });
-          dispatch({ type: 'RESET_SESSION' });
-          
+          dispatch({ type: "SET_CALCULATIONS", payload: shuffledCalculations });
+          dispatch({ type: "RESET_SESSION" });
+
           // Set current index from URL if available
-          if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex) {
-            dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+          if (
+            urlState.currentIndex !== undefined &&
+            urlState.currentIndex !== state.currentCalculationIndex
+          ) {
+            dispatch({
+              type: "SET_CURRENT_INDEX",
+              payload: urlState.currentIndex,
+            });
           }
         }
       }, 100);
     }
-    
+
     // Sync current index from URL
-    if (urlState.currentIndex !== undefined && urlState.currentIndex !== state.currentCalculationIndex && state.calculations.length > 0) {
-      dispatch({ type: 'SET_CURRENT_INDEX', payload: urlState.currentIndex });
+    if (
+      urlState.currentIndex !== undefined &&
+      urlState.currentIndex !== state.currentCalculationIndex &&
+      state.calculations.length > 0
+    ) {
+      dispatch({ type: "SET_CURRENT_INDEX", payload: urlState.currentIndex });
     }
   }, []); // Only run once on mount
 
@@ -116,7 +140,7 @@ export default function TestPhase() {
   const handleSubmitAnswer = (answer: number) => {
     const oldIndex = state.currentCalculationIndex;
     submitAnswer(answer);
-    
+
     // Update URL with new index after submission
     setTimeout(() => {
       if (state.currentCalculationIndex !== oldIndex) {
@@ -128,7 +152,7 @@ export default function TestPhase() {
   const handleSkipQuestion = () => {
     const oldIndex = state.currentCalculationIndex;
     skipQuestion();
-    
+
     // Update URL with new index after skipping
     setTimeout(() => {
       if (state.currentCalculationIndex !== oldIndex) {
@@ -212,14 +236,14 @@ export default function TestPhase() {
       };
 
       // Save to localStorage
-      const profiles = JSON.parse(localStorage.getItem("profiles") || "[]");
+      const profiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
       const profileIndex = profiles.findIndex(
         (p: any) => p.id === updatedProfile.id
       );
       if (profileIndex >= 0) {
         profiles[profileIndex] = updatedProfile;
-        localStorage.setItem("profiles", JSON.stringify(profiles));
-        localStorage.setItem("currentProfile", JSON.stringify(updatedProfile));
+        localStorage.setItem(LOCAL_STORAGE_PROFILES_KEY, profiles);
+        localStorage.setItem(LOCAL_STORAGE_CURRENT_PROFILE_KEY, updatedProfile);
       }
     }
 
@@ -275,11 +299,7 @@ export default function TestPhase() {
           </div>
 
           <div className={styles.actions}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleBackToLearning}
-            >
+            <Button variant="primary" size="lg" onClick={handleBackToLearning}>
               Start New Session
             </Button>
             <Button
@@ -316,7 +336,11 @@ export default function TestPhase() {
       </GradientHeader>
 
       <div className={styles.content}>
-        <Card variant="elevated" padding="lg" className={styles.questionSection}>
+        <Card
+          variant="elevated"
+          padding="lg"
+          className={styles.questionSection}
+        >
           <BackButton />
           <div className={styles.question}>
             <span className={styles.operand}>

@@ -250,7 +250,7 @@ export default function LearningPhase() {
                   size="lg"
                   onClick={() => navigateToStep("range")}
                 >
-                  Continue to Range Selection
+                  Continue
                 </Button>
               </div>
             )}

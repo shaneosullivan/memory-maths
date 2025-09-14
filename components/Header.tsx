@@ -6,6 +6,8 @@ import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
 import { Button, Input, ButtonLink } from "@/components/ui";
 import styles from "./Header.module.css";
+import { LOCAL_STORAGE_PROFILES_KEY } from "@/lib/consts";
+import { localStorage } from "@/utils/storage";
 
 export default function Header() {
   const { state, switchProfile, deleteProfile } = useApp();
@@ -16,7 +18,7 @@ export default function Header() {
   const [newProfileName, setNewProfileName] = useState("");
 
   useEffect(() => {
-    const savedProfiles = JSON.parse(localStorage.getItem("profiles") || "[]");
+    const savedProfiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
     setProfiles(savedProfiles);
   }, []);
 
@@ -33,7 +35,7 @@ export default function Header() {
 
       const updatedProfiles = [...profiles, profile];
       setProfiles(updatedProfiles);
-      localStorage.setItem("profiles", JSON.stringify(updatedProfiles));
+      localStorage.setItem(LOCAL_STORAGE_PROFILES_KEY, updatedProfiles);
 
       switchProfile(profile);
       setProfileId(profile.id);
@@ -60,7 +62,9 @@ export default function Header() {
       <div className={styles.container}>
         <div className={styles.left}>
           <ButtonLink
-            href={`/?phase=learning&profileId=${getCurrentState().profileId || 'guest'}`}
+            href={`/?phase=learning&profileId=${
+              getCurrentState().profileId || "guest"
+            }`}
             variant="ghost"
             className={styles.titleLink}
           >

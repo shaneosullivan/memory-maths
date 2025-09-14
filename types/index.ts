@@ -36,6 +36,7 @@ export interface Profile {
 
 export interface AppState {
   currentProfile: Profile | null;
+  isProfileLoading: boolean;
   phase: Phase;
   operation: Operation | null;
   baseNumber: number;

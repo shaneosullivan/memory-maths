@@ -34,6 +34,11 @@ function AppContent() {
     }
   }, [shouldAutoCreateGuest, createProfile, setProfileId, urlState.profileId]);
 
+  // Show loading while profile is being loaded
+  if (state.isProfileLoading) {
+    return <div></div>;
+  }
+
   // Show loading instead of ProfileSelector when we should auto-create guest
   if (!state.currentProfile && shouldAutoCreateGuest) {
     return <div></div>;
