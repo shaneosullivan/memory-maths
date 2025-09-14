@@ -142,6 +142,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const profile = profiles.find((p: Profile) => p.id === profileId);
       if (profile) {
         dispatch({ type: "SET_PROFILE", payload: profile });
+      } else {
+        // Profile ID specified but not found - remove it from URL to avoid confusion
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.delete('profileId');
+        window.history.replaceState({}, '', currentUrl.toString());
       }
     } else {
       // Fallback to saved profile

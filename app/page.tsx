@@ -16,13 +16,20 @@ function AppContent() {
   const urlState = getCurrentState();
 
   // Check if we should auto-create guest profile (synchronously to prevent flash)
+  // Only create guest profile if:
+  // 1. No current profile loaded
+  // 2. Not currently loading a profile 
+  // 3. Either explicitly requesting guest OR no profile ID but has active session data
   const shouldAutoCreateGuest =
     !state.currentProfile &&
+    !state.isProfileLoading &&
     (urlState.profileId === "guest" ||
-      urlState.operation ||
-      urlState.baseNumber ||
-      urlState.rangeMin ||
-      urlState.phase !== "learning");
+      (!urlState.profileId && (
+        urlState.operation ||
+        urlState.baseNumber ||
+        urlState.rangeMin ||
+        urlState.phase !== "learning"
+      )));
 
   // Auto-create guest profile when needed
   useEffect(() => {
