@@ -407,6 +407,7 @@
 
 .calculation {
   color: var(--foreground);
+  white-space: nowrap;
 }
 
 .equals {
