@@ -6,7 +6,7 @@ import { Operation } from "@/types";
 import { useUrlNavigation, Step } from "@/hooks/useUrlNavigation";
 import DualRangeSlider from "@/components/DualRangeSlider";
 import BackButton from "@/components/BackButton";
-import { GradientHeader, NumberGrid, Button, Card } from "@/components/ui";
+import { GradientHeader, NumberGrid, Button, Card, FloatingButton } from "@/components/ui";
 import styles from "./LearningPhase.module.css";
 
 export default function LearningPhase() {
@@ -272,11 +272,9 @@ export default function LearningPhase() {
                 handleRangeChange(urlState.rangeMin || state.rangeMin, max)
               }
             />
-            <div className={styles.stepActions}>
-              <Button variant="primary" size="lg" onClick={handleRangeConfirm}>
-                Generate Calculations
-              </Button>
-            </div>
+            <FloatingButton onClick={handleRangeConfirm}>
+              Generate Calculations
+            </FloatingButton>
           </div>
         )}
 
@@ -313,19 +311,13 @@ export default function LearningPhase() {
               ))}
             </div>
 
-            <div className={styles.stepActions}>
-              <p className={styles.practiceInstructions}>
-                When you are happy that you know all these answers well, click
-                the button below
-              </p>
-              <Button
-                variant="primary"
-                size="xl"
-                onClick={handleMoveToPractice}
-              >
-                Go Practice!
-              </Button>
-            </div>
+            <p className={styles.practiceInstructions}>
+              When you are happy that you know all these answers well, click
+              the button below
+            </p>
+            <FloatingButton onClick={handleMoveToPractice} size="xl">
+              Go Practice!
+            </FloatingButton>
           </div>
         )}
       </div>

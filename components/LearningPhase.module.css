@@ -59,7 +59,7 @@
 }
 
 .stepContent {
-  padding: var(--space-8) 0 var(--space-12) 0;
+  padding: var(--space-8) 0;
   display: flex;
   flex-direction: column;
   align-items: center;

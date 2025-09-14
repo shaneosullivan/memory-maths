@@ -6,7 +6,7 @@ import { Operation, Profile } from "@/types";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
-import { GradientHeader, ProgressBar, Button, Card } from "@/components/ui";
+import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
 import styles from "./TestPhase.module.css";
 import {
   LOCAL_STORAGE_CURRENT_PROFILE_KEY,
@@ -298,10 +298,10 @@ export default function TestPhase() {
             </div>
           </div>
 
+          <FloatingButton onClick={handleBackToLearning}>
+            Start New Session
+          </FloatingButton>
           <div className={styles.actions}>
-            <Button variant="primary" size="lg" onClick={handleBackToLearning}>
-              Start New Session
-            </Button>
             <Button
               variant="secondary"
               size="lg"

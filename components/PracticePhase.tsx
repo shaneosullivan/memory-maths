@@ -6,7 +6,7 @@ import { Operation } from "@/types";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
-import { GradientHeader, ProgressBar, Button, Card } from "@/components/ui";
+import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
 import styles from "./PracticePhase.module.css";
 
 export default function PracticePhase() {
@@ -247,17 +247,15 @@ export default function PracticePhase() {
               <div className={styles.statLabel}>Accuracy</div>
             </div>
           </div>
+          <FloatingButton
+            onClick={() => {
+              navigateToPhase("test");
+              moveToPhase("test");
+            }}
+          >
+            Go Test Myself!
+          </FloatingButton>
           <div className={styles.actions}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => {
-                navigateToPhase("test");
-                moveToPhase("test");
-              }}
-            >
-              Go Test Myself!
-            </Button>
             <Button
               variant="secondary"
               size="lg"
