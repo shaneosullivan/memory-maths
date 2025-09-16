@@ -1,0 +1,32 @@
+.container {
+  padding: 20px 16px;
+  min-width: 350px;
+}
+
+.sliderWrapper {
+  padding: 50px 20px 20px;
+  position: relative;
+}
+
+.info {
+  text-align: center;
+  font-size: 16px;
+  color: var(--foreground);
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+    margin-top: 20px;
+  }
+
+  .sliderWrapper {
+    padding: 60px 20px 30px;
+  }
+
+  .info {
+    font-size: 18px;
+  }
+}

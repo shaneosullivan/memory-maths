@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import ProfileSelector from "@/components/ProfileSelector";

@@ -4,9 +4,15 @@ import { useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Operation } from "@/types";
 import { useUrlNavigation, Step } from "@/hooks/useUrlNavigation";
-import DualRangeSlider from "@/components/DualRangeSlider";
+import RangeSliderWrapper from "@/components/RangeSliderWrapper";
 import BackButton from "@/components/BackButton";
-import { GradientHeader, NumberGrid, Button, Card, FloatingButton } from "@/components/ui";
+import {
+  GradientHeader,
+  NumberGrid,
+  Button,
+  Card,
+  FloatingButton,
+} from "@/components/ui";
 import styles from "./LearningPhase.module.css";
 
 export default function LearningPhase() {
@@ -260,17 +266,14 @@ export default function LearningPhase() {
         {currentStep === "range" && (
           <div className={styles.stepContent}>
             <BackButton />
-            <DualRangeSlider
+            <RangeSliderWrapper
               min={2}
               max={20}
               valueMin={urlState.rangeMin || state.rangeMin}
               valueMax={urlState.rangeMax || state.rangeMax}
-              onMinChange={(min) =>
-                handleRangeChange(min, urlState.rangeMax || state.rangeMax)
-              }
-              onMaxChange={(max) =>
-                handleRangeChange(urlState.rangeMin || state.rangeMin, max)
-              }
+              onRangeChange={(min, max) => {
+                handleRangeChange(min, max);
+              }}
             />
             <FloatingButton onClick={handleRangeConfirm}>
               Generate Calculations
@@ -312,8 +315,8 @@ export default function LearningPhase() {
             </div>
 
             <p className={styles.practiceInstructions}>
-              When you are happy that you know all these answers well, click
-              the button below
+              When you are happy that you know all these answers well, click the
+              button below
             </p>
             <FloatingButton onClick={handleMoveToPractice} size="xl">
               Go Practice!
