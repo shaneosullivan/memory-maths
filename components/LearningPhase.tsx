@@ -26,6 +26,7 @@ export default function LearningPhase() {
     generateCalculations,
     moveToPhase,
   } = useApp();
+
   const {
     getCurrentState,
     navigateToPhase,
@@ -263,23 +264,62 @@ export default function LearningPhase() {
           </div>
         )}
 
-        {currentStep === "range" && (
-          <div className={styles.stepContent}>
-            <BackButton />
-            <RangeSliderWrapper
-              min={2}
-              max={20}
-              valueMin={urlState.rangeMin || state.rangeMin}
-              valueMax={urlState.rangeMax || state.rangeMax}
-              onRangeChange={(min, max) => {
-                handleRangeChange(min, max);
-              }}
-            />
-            <FloatingButton onClick={handleRangeConfirm}>
-              Generate Calculations
-            </FloatingButton>
-          </div>
-        )}
+        {currentStep === "range" &&
+          (() => {
+            const operation = urlState.operation || state.operation;
+            const baseNumber = urlState.baseNumber || state.baseNumber;
+
+            // Set slider range based on operation type
+            const sliderMin = operation === "subtraction" ? baseNumber : 2;
+            const sliderMax =
+              operation === "subtraction" ? baseNumber + 20 : 20;
+
+            // Adjust current values to fit within the new range
+            const currentMin = urlState.rangeMin || state.rangeMin;
+            const currentMax = urlState.rangeMax || state.rangeMax;
+
+            let adjustedValueMin, adjustedValueMax;
+
+            if (operation === "subtraction") {
+              // For subtraction, use URL values if they exist and are valid, otherwise use defaults
+              if (urlState.rangeMin && urlState.rangeMin >= sliderMin) {
+                adjustedValueMin = urlState.rangeMin;
+              } else {
+                adjustedValueMin = sliderMin; // Default to base number
+              }
+              
+              if (urlState.rangeMax && urlState.rangeMax >= adjustedValueMin && urlState.rangeMax <= sliderMax) {
+                adjustedValueMax = urlState.rangeMax;
+              } else {
+                adjustedValueMax = Math.min(baseNumber + 10, sliderMax); // Default to base + 10
+              }
+            } else {
+              // For other operations, use existing logic
+              adjustedValueMin = Math.max(currentMin, sliderMin);
+              adjustedValueMax = Math.min(
+                Math.max(currentMax, adjustedValueMin + 1),
+                sliderMax
+              );
+            }
+
+            return (
+              <div className={styles.stepContent}>
+                <BackButton />
+                <RangeSliderWrapper
+                  min={sliderMin}
+                  max={sliderMax}
+                  valueMin={adjustedValueMin}
+                  valueMax={adjustedValueMax}
+                  onRangeChange={(min, max) => {
+                    handleRangeChange(min, max);
+                  }}
+                />
+                <FloatingButton onClick={handleRangeConfirm}>
+                  Generate Calculations
+                </FloatingButton>
+              </div>
+            );
+          })()}
 
         {currentStep === "practice" && (
           <div className={styles.stepContent}>

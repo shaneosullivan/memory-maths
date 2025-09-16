@@ -265,8 +265,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
           break;
         case "subtraction":
           operand1 = baseNumber + i;
-          operand2 = i;
-          answer = operand1 - operand2;
+          operand2 = baseNumber;
+          answer = i;
           break;
         case "multiplication":
           if (isSquareNumbers) {
