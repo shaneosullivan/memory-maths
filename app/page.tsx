@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import ProfileSelector from "@/components/ProfileSelector";
@@ -8,12 +8,14 @@ import Header from "@/components/Header";
 import LearningPhase from "@/components/LearningPhase";
 import PracticePhase from "@/components/PracticePhase";
 import TestPhase from "@/components/TestPhase";
+import ToasterManager from "@/components/ToasterManager";
 import styles from "./page.module.css";
 
 function AppContent() {
   const { state, createProfile } = useApp();
   const { getCurrentState, setProfileId } = useUrlNavigation();
   const urlState = getCurrentState();
+  const toasterRef = useRef<{ showToaster: (category: 'correct' | 'wrong', x: number, y: number) => void } | null>(null);
 
   // Check if we should auto-create guest profile (synchronously to prevent flash)
   // Only create guest profile if:
@@ -62,9 +64,10 @@ function AppContent() {
         {(!urlState.phase || urlState.phase === "learning") && (
           <LearningPhase />
         )}
-        {urlState.phase === "practice" && <PracticePhase />}
-        {urlState.phase === "test" && <TestPhase />}
+        {urlState.phase === "practice" && <PracticePhase toasterRef={toasterRef} />}
+        {urlState.phase === "test" && <TestPhase toasterRef={toasterRef} />}
       </main>
+      <ToasterManager ref={toasterRef} />
     </div>
   );
 }

@@ -40,7 +40,7 @@ interface AppContextType {
     isSquareNumbers?: boolean;
   }) => void;
   moveToPhase: (phase: Phase) => void;
-  submitAnswer: (answer: number) => void;
+  submitAnswer: (answer: number, toasterCallback?: (category: 'correct' | 'wrong', x: number, y: number) => void) => void;
   skipQuestion: () => void;
   showMultipleChoice: () => void;
 }
@@ -320,7 +320,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const submitAnswer = (answer: number) => {
+  const submitAnswer = (answer: number, toasterCallback?: (category: 'correct' | 'wrong', x: number, y: number) => void) => {
     const currentCalc = state.calculations[state.currentCalculationIndex];
     // For division, allow small rounding errors
     const isCorrect =
@@ -330,6 +330,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     if (!isCorrect) {
       dispatch({ type: "INCREMENT_MISTAKES" });
+    }
+
+    // Trigger toaster animation if callback provided
+    if (toasterCallback) {
+      // Get the submit button position or use a default
+      const submitButton = document.querySelector('[data-keypad-enter]') as HTMLElement;
+      if (submitButton) {
+        const rect = submitButton.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        toasterCallback(isCorrect ? 'correct' : 'wrong', x, y);
+      }
     }
 
     dispatch({

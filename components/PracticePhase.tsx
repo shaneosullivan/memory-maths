@@ -9,7 +9,11 @@ import BackButton from "@/components/BackButton";
 import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
 import styles from "./PracticePhase.module.css";
 
-export default function PracticePhase() {
+interface PracticePhaseProps {
+  toasterRef: React.RefObject<{ showToaster: (category: 'correct' | 'wrong', x: number, y: number) => void } | null>;
+}
+
+export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
   const {
     state,
     dispatch,
@@ -188,7 +192,7 @@ export default function PracticePhase() {
 
   const handleSubmitAnswer = (answer: number) => {
     const oldIndex = state.currentCalculationIndex;
-    submitAnswer(answer);
+    submitAnswer(answer, toasterRef.current?.showToaster);
 
     // Update URL with new index after submission
     setTimeout(() => {

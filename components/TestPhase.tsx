@@ -14,7 +14,11 @@ import {
 } from "@/lib/consts";
 import { localStorage } from "@/utils/storage";
 
-export default function TestPhase() {
+interface TestPhaseProps {
+  toasterRef: React.RefObject<{ showToaster: (category: 'correct' | 'wrong', x: number, y: number) => void } | null>;
+}
+
+export default function TestPhase({ toasterRef }: TestPhaseProps) {
   const {
     state,
     dispatch,
@@ -137,7 +141,7 @@ export default function TestPhase() {
 
   const handleSubmitAnswer = (answer: number) => {
     const oldIndex = state.currentCalculationIndex;
-    submitAnswer(answer);
+    submitAnswer(answer, toasterRef.current?.showToaster);
 
     // Update URL with new index after submission
     setTimeout(() => {

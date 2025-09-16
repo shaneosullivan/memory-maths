@@ -57,6 +57,7 @@ export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
                 variant={getKeyVariant(key) as any}
                 onClick={() => handleKeyPress(key)}
                 className={getKeyClassName(key)}
+                data-keypad-enter={key === "enter" ? "true" : undefined}
               >
                 {getKeyLabel(key)}
               </Button>
