@@ -5,6 +5,7 @@ import {
   useContext,
   useReducer,
   useEffect,
+  useRef,
   ReactNode,
 } from "react";
 import {
@@ -119,6 +120,7 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
+  const toasterDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Check URL for profile ID first
@@ -332,15 +334,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
       dispatch({ type: "INCREMENT_MISTAKES" });
     }
 
-    // Trigger toaster animation if callback provided
+    // Trigger toaster animation if callback provided (with debouncing)
     if (toasterCallback) {
-      // Get the submit button position or use a default
-      const submitButton = document.querySelector('[data-keypad-enter]') as HTMLElement;
-      if (submitButton) {
-        const rect = submitButton.getBoundingClientRect();
-        const x = rect.left + rect.width / 2;
-        const y = rect.top + rect.height / 2;
-        toasterCallback(isCorrect ? 'correct' : 'wrong', x, y);
+      // Only execute if no toaster is currently pending (debounce)
+      if (!toasterDebounceRef.current) {
+        const submitButton = document.querySelector('[data-keypad-enter]') as HTMLElement;
+        if (submitButton) {
+          const rect = submitButton.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          toasterCallback(isCorrect ? 'correct' : 'wrong', x, y);
+          
+          // Set debounce period to prevent additional calls
+          toasterDebounceRef.current = setTimeout(() => {
+            toasterDebounceRef.current = null;
+          }, 500); // 500ms debounce period
+        }
       }
     }
 
