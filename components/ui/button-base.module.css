@@ -15,14 +15,15 @@
 }
 
 .buttonBase::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.1) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
     rgba(255, 255, 255, 0) 100%
   );
   opacity: 0;
@@ -43,7 +44,11 @@
 
 /* Variants */
 .primary {
-  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-hover) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--brand-primary) 0%,
+    var(--brand-primary-hover) 100%
+  );
   color: white;
   box-shadow: 0 2px 8px rgba(0, 102, 255, 0.15);
 }
@@ -59,9 +64,9 @@
 }
 
 .secondary:hover:not(.disabled) {
-  background: var(--background-secondary);
+  /* background: var(--background-secondary); */
   border-color: var(--border-focus);
-  color: var(--foreground);
+  /* color: var(--foreground); */
   box-shadow: var(--shadow-md);
 }
 
