@@ -45,7 +45,7 @@ const RangeSliderWrapper = (props: RangeSliderWrapperProps) => {
         />
       </div>
       <div className={styles.info}>
-        Range: {valueMin} to {valueMax} ({valueMax - valueMin + 1} calculations)
+        Range: {valueRange[0]} to {valueRange[1]} ({valueRange[1] - valueRange[0] + 1} calculations)
       </div>
     </Card>
   );

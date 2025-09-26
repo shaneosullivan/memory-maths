@@ -1,6 +1,7 @@
 .container {
   padding: 20px 16px;
   min-width: 350px;
+  user-select: none;
 }
 
 .sliderWrapper {
