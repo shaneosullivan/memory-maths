@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="64" height="64" rx="8" fill="#0066ff"/>
+  
+  <!-- Divide symbol (centered) -->
+  <g transform="translate(32, 32)">
+    <circle cx="0" cy="-12" r="4" fill="white"/>
+    <line x1="-16" y1="0" x2="16" y2="0" stroke="white" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="0" cy="12" r="4" fill="white"/>
+  </g>
+</svg>

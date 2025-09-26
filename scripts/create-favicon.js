@@ -6,8 +6,8 @@ async function createFavicon() {
     const publicDir = path.join(__dirname, '..', 'public');
     const appDir = path.join(__dirname, '..', 'app');
     
-    // Use the existing icon-512.svg as the source
-    const svgSource = path.join(publicDir, 'icon-512.svg');
+    // Use the divide symbol favicon SVG as the source
+    const svgSource = path.join(publicDir, 'favicon-divide.svg');
     
     if (!fs.existsSync(svgSource)) {
         console.error('Source SVG not found:', svgSource);
