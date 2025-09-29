@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "PORT=3033 next dev --turbopack",
+    "dev": "npm run devkill && PORT=3033 next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
     "devkill": "kill -9 $(lsof -t -i:3033)"

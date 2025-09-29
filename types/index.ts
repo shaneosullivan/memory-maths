@@ -25,11 +25,23 @@ export interface SessionStats {
   phase: Phase;
 }
 
+export type AchievementType = 'bronze' | 'silver' | 'gold' | 'rainbow';
+
+export interface Achievement {
+  id: string;
+  type: AchievementType;
+  operation: Operation | 'all'; // 'all' for rainbow achievements
+  baseNumber: number;
+  totalQuestions: number;
+  earnedAt: Date;
+}
+
 export interface Profile {
   id: string;
   name: string;
   isGuest: boolean;
   stats: SessionStats[];
+  achievements: Achievement[];
   createdAt: Date;
   lastUsed: Date;
 }

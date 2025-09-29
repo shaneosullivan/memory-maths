@@ -2,20 +2,24 @@
 
 import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
-import { Operation, Profile } from "@/types";
+import { Operation, Profile, Achievement } from "@/types";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
-import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
-import styles from "./TestPhase.module.css";
 import {
-  LOCAL_STORAGE_CURRENT_PROFILE_KEY,
-  LOCAL_STORAGE_PROFILES_KEY,
-} from "@/lib/consts";
-import { localStorage } from "@/utils/storage";
+  GradientHeader,
+  ProgressBar,
+  Button,
+  Card,
+  FloatingButton,
+} from "@/components/ui";
+import styles from "./TestPhase.module.css";
+import { checkForNewAchievements } from "@/utils/achievements";
 
 interface TestPhaseProps {
-  toasterRef: React.RefObject<{ showToaster: (category: 'correct' | 'wrong', x: number, y: number) => void } | null>;
+  toasterRef: React.RefObject<{
+    showToaster: (category: "correct" | "wrong", x: number, y: number) => void;
+  } | null>;
 }
 
 export default function TestPhase({ toasterRef }: TestPhaseProps) {
@@ -31,17 +35,20 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
     setRangeMin,
     setRangeMax,
     setIsSquareNumbers,
+    updateProfile,
   } = useApp();
   const { navigateToPhase, clearUrlState, getCurrentState, setCurrentIndex } =
     useUrlNavigation();
   const [currentInput, setCurrentInput] = useState("");
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+  const [hasProcessedCompletion, setHasProcessedCompletion] = useState(false);
 
   // Sync AppContext with URL state when component mounts
   useEffect(() => {
     const urlState = getCurrentState();
 
-    // If URL has parameters but AppContext doesn't, sync them
-    if (urlState.operation && !state.operation) {
+    // Always sync URL parameters with AppContext when URL has values
+    if (urlState.operation && urlState.operation !== state.operation) {
       setOperation(urlState.operation);
     }
     if (urlState.baseNumber && urlState.baseNumber !== state.baseNumber) {
@@ -61,10 +68,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
     }
 
     // If we have operation but no calculations, generate them (use defaults for missing ranges)
-    if (
-      urlState.operation &&
-      state.calculations.length === 0
-    ) {
+    if (urlState.operation && state.calculations.length === 0) {
       generateCalculations({
         operation: urlState.operation,
         baseNumber: urlState.baseNumber || state.baseNumber || 2,
@@ -90,6 +94,10 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
           dispatch({ type: "SET_CALCULATIONS", payload: shuffledCalculations });
           dispatch({ type: "RESET_SESSION" });
 
+          // Reset completion processing flag for new test
+          setHasProcessedCompletion(false);
+          setNewAchievements([]);
+
           // Set current index from URL if available
           if (
             urlState.currentIndex !== undefined &&
@@ -112,12 +120,83 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
     ) {
       dispatch({ type: "SET_CURRENT_INDEX", payload: urlState.currentIndex });
     }
+
+    console.log("test mounted");
   }, []); // Only run once on mount
 
+  // Handle test completion and profile updates
+  useEffect(() => {
+    const isComplete =
+      state.calculations.length > 0 &&
+      state.calculations.every(
+        (calc) => calc.userAnswer !== undefined || calc.skipped
+      );
+
+    console.log("TestPhase state.operation:", state.operation);
+
+    if (
+      isComplete &&
+      !hasProcessedCompletion &&
+      state.currentProfile &&
+      !state.currentProfile.isGuest
+    ) {
+      const totalQuestions = state.calculations.length;
+
+      const sessionStats = {
+        mistakes: state.sessionMistakes,
+        totalQuestions,
+        operation: state.operation!,
+        baseNumber: state.baseNumber,
+        rangeMin: state.rangeMin,
+        rangeMax: state.rangeMax,
+        completedAt: new Date(),
+        phase: "test" as const,
+      };
+
+      // Check for new achievements
+      const achievements = checkForNewAchievements(
+        state.currentProfile,
+        sessionStats
+      );
+      if (achievements.length > 0) {
+        setNewAchievements(achievements);
+      }
+
+      // Update profile stats and achievements
+      const updatedProfile = {
+        ...state.currentProfile,
+        stats: [...state.currentProfile.stats, sessionStats],
+        achievements: [...state.currentProfile.achievements, ...achievements],
+        lastUsed: new Date(),
+      };
+
+      console.log(
+        "Updating profile with new stats and achievements:",
+        updatedProfile
+      );
+
+      // Use the updateProfile method to update both localStorage and in-memory state
+      updateProfile(updatedProfile);
+      setHasProcessedCompletion(true);
+    }
+  }, [
+    state.calculations,
+    state.sessionMistakes,
+    state.currentProfile,
+    hasProcessedCompletion,
+    state.operation,
+    state.baseNumber,
+    state.rangeMin,
+    state.rangeMax,
+    updateProfile,
+  ]);
+
   const currentCalculation = state.calculations[state.currentCalculationIndex];
-  const isComplete = state.calculations.length > 0 && state.calculations.every(
-    (calc) => calc.userAnswer !== undefined || calc.skipped
-  );
+  const isComplete =
+    state.calculations.length > 0 &&
+    state.calculations.every(
+      (calc) => calc.userAnswer !== undefined || calc.skipped
+    );
   const completedCount = state.calculations.filter(
     (calc) => calc.userAnswer !== undefined || calc.skipped
   ).length;
@@ -217,38 +296,6 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
     const totalQuestions = state.calculations.length;
     const accuracy = Math.round((correctAnswers / totalQuestions) * 100);
 
-    // Save stats to profile (if not guest)
-    if (state.currentProfile && !state.currentProfile.isGuest) {
-      const sessionStats = {
-        mistakes: state.sessionMistakes,
-        totalQuestions,
-        operation: state.operation!,
-        baseNumber: state.baseNumber,
-        rangeMin: state.rangeMin,
-        rangeMax: state.rangeMax,
-        completedAt: new Date(),
-        phase: "test" as const,
-      };
-
-      // Update profile stats
-      const updatedProfile = {
-        ...state.currentProfile,
-        stats: [...state.currentProfile.stats, sessionStats],
-        lastUsed: new Date(),
-      };
-
-      // Save to localStorage
-      const profiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
-      const profileIndex = profiles.findIndex(
-        (p: any) => p.id === updatedProfile.id
-      );
-      if (profileIndex >= 0) {
-        profiles[profileIndex] = updatedProfile;
-        localStorage.setItem(LOCAL_STORAGE_PROFILES_KEY, profiles);
-        localStorage.setItem(LOCAL_STORAGE_CURRENT_PROFILE_KEY, updatedProfile);
-      }
-    }
-
     return (
       <div className={styles.container}>
         <div className={styles.summary}>
@@ -271,6 +318,38 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
               <div className={styles.statLabel}>Accuracy</div>
             </div>
           </div>
+
+          {newAchievements.length > 0 && (
+            <div className={styles.achievements}>
+              <h3>🎉 New Achievements Unlocked!</h3>
+              <div className={styles.achievementCards}>
+                {newAchievements.map((achievement) => (
+                  <div key={achievement.id} className={styles.achievementCard}>
+                    <img
+                      src={`/images/${achievement.type}_medal_small.png`}
+                      alt={`${achievement.type} medal`}
+                      className={styles.achievementImage}
+                    />
+                    <div className={styles.achievementText}>
+                      <div className={styles.achievementType}>
+                        {achievement.type.charAt(0).toUpperCase() +
+                          achievement.type.slice(1)}{" "}
+                        Medal
+                      </div>
+                      <div className={styles.achievementDetail}>
+                        {achievement.operation === "all"
+                          ? `Master of ${achievement.baseNumber}`
+                          : `${
+                              achievement.operation.charAt(0).toUpperCase() +
+                              achievement.operation.slice(1)
+                            } ${achievement.baseNumber}`}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className={styles.breakdown}>
             <h3>Question Breakdown</h3>
@@ -308,6 +387,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
               variant="secondary"
               size="lg"
               onClick={() => {
+                setHasProcessedCompletion(false);
                 navigateToPhase("test");
                 moveToPhase("test");
               }}

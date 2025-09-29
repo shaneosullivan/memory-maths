@@ -28,6 +28,7 @@ interface AppContextType {
   createProfile: (name: string, isGuest?: boolean) => void;
   switchProfile: (profile: Profile) => void;
   deleteProfile: (profileId: string) => void;
+  updateProfile: (profile: Profile) => void;
   setOperation: (operation: Operation) => void;
   setBaseNumber: (base: number) => void;
   setRangeMin: (min: number) => void;
@@ -134,6 +135,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         name: "Guest",
         isGuest: true,
         stats: [],
+        achievements: [],
         createdAt: new Date(),
         lastUsed: new Date(),
       };
@@ -143,6 +145,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const profiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
       const profile = profiles.find((p: Profile) => p.id === profileId);
       if (profile) {
+        // Migrate profile if it doesn't have achievements
+        if (!profile.achievements) {
+          profile.achievements = [];
+        }
         dispatch({ type: "SET_PROFILE", payload: profile });
       } else {
         // Profile ID specified but not found - remove it from URL to avoid confusion
@@ -157,6 +163,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
         null
       );
       if (savedProfile) {
+        // Migrate profile if it doesn't have achievements
+        if (!savedProfile.achievements) {
+          savedProfile.achievements = [];
+        }
         dispatch({ type: "SET_PROFILE", payload: savedProfile });
       }
     }
@@ -189,6 +199,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       name: isGuest ? "Guest" : name,
       isGuest,
       stats: [],
+      achievements: [],
       createdAt: new Date(),
       lastUsed: new Date(),
     };
@@ -215,6 +226,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (state.currentProfile?.id === profileId) {
       dispatch({ type: "SET_PROFILE", payload: null });
       localStorage.removeItem(LOCAL_STORAGE_CURRENT_PROFILE_KEY);
+    }
+  };
+
+  const updateProfile = (updatedProfile: Profile) => {
+    // Update the profile in localStorage
+    const profiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
+    const profileIndex = profiles.findIndex((p: Profile) => p.id === updatedProfile.id);
+    
+    if (profileIndex >= 0) {
+      profiles[profileIndex] = updatedProfile;
+      localStorage.setItem(LOCAL_STORAGE_PROFILES_KEY, profiles);
+    }
+
+    // Update current profile in localStorage if this is the current profile
+    if (state.currentProfile?.id === updatedProfile.id) {
+      if (!updatedProfile.isGuest) {
+        localStorage.setItem(LOCAL_STORAGE_CURRENT_PROFILE_KEY, updatedProfile);
+      }
+      // Update the in-memory state to trigger re-renders
+      dispatch({ type: "SET_PROFILE", payload: updatedProfile });
     }
   };
 
@@ -399,6 +430,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         createProfile,
         switchProfile,
         deleteProfile,
+        updateProfile,
         setOperation,
         setBaseNumber,
         setRangeMin,

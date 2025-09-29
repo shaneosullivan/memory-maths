@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Operation } from "@/types";
-import { useUrlNavigation, Step } from "@/hooks/useUrlNavigation";
+import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import RangeSliderWrapper from "@/components/RangeSliderWrapper";
 import BackButton from "@/components/BackButton";
+import AchievementsDialog from "@/components/AchievementsDialog";
 import {
   GradientHeader,
   NumberGrid,
@@ -39,6 +40,7 @@ export default function LearningPhase() {
 
   const urlState = getCurrentState();
   const currentStep = urlState.step || "operation";
+  const [showAchievementsDialog, setShowAchievementsDialog] = useState(false);
 
   // Auto-generate calculations when component mounts with complete URL parameters
   useEffect(() => {
@@ -204,6 +206,107 @@ export default function LearningPhase() {
                 </button>
               ))}
             </div>
+
+            {/* Achievements Section */}
+            {state.currentProfile && !state.currentProfile.isGuest && (
+              <div className={styles.achievementsSection}>
+                <h3>Achievements</h3>
+                <div className={styles.achievementsSummary}>
+                  {state.currentProfile.achievements?.length > 0 ? (
+                    <>
+                      <div className={styles.medalCounts}>
+                        <div className={styles.medalCount}>
+                          <img
+                            src="/images/bronze_medal_small.png"
+                            alt="Bronze medals"
+                            className={styles.medalIcon}
+                          />
+                          <span>
+                            {
+                              state.currentProfile.achievements.filter(
+                                (a) => a.type === "bronze"
+                              ).length
+                            }
+                          </span>
+                        </div>
+                        <div className={styles.medalCount}>
+                          <img
+                            src="/images/silver_medal_small.png"
+                            alt="Silver medals"
+                            className={styles.medalIcon}
+                          />
+                          <span>
+                            {
+                              state.currentProfile.achievements.filter(
+                                (a) => a.type === "silver"
+                              ).length
+                            }
+                          </span>
+                        </div>
+                        <div className={styles.medalCount}>
+                          <img
+                            src="/images/gold_medal_small.png"
+                            alt="Gold medals"
+                            className={styles.medalIcon}
+                          />
+                          <span>
+                            {
+                              state.currentProfile.achievements.filter(
+                                (a) => a.type === "gold"
+                              ).length
+                            }
+                          </span>
+                        </div>
+                        <div className={styles.medalCount}>
+                          <img
+                            src="/images/rainbow_medal_small.png"
+                            alt="Rainbow medals"
+                            className={styles.medalIcon}
+                          />
+                          <span>
+                            {
+                              state.currentProfile.achievements.filter(
+                                (a) => a.type === "rainbow"
+                              ).length
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setShowAchievementsDialog(true)}
+                        className={styles.viewAchievementsButton}
+                      >
+                        View All Achievements
+                      </Button>
+                    </>
+                  ) : (
+                    <div className={styles.noAchievements}>
+                      <p>No achievements yet!</p>
+                      <p>Get 100% in a test to earn your first medal:</p>
+                      <ul>
+                        <li>
+                          <strong>Bronze:</strong> Complete 9 or fewer
+                          calculations
+                        </li>
+                        <li>
+                          <strong>Silver:</strong> Complete 15 or fewer
+                          calculations
+                        </li>
+                        <li>
+                          <strong>Gold:</strong> Complete all 19 calculations
+                        </li>
+                        <li>
+                          <strong>Rainbow:</strong> Get gold in all 4 operations
+                          for the same number
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -287,8 +390,12 @@ export default function LearningPhase() {
               } else {
                 adjustedValueMin = sliderMin; // Default to base number
               }
-              
-              if (urlState.rangeMax && urlState.rangeMax >= adjustedValueMin && urlState.rangeMax <= sliderMax) {
+
+              if (
+                urlState.rangeMax &&
+                urlState.rangeMax >= adjustedValueMin &&
+                urlState.rangeMax <= sliderMax
+              ) {
                 adjustedValueMax = urlState.rangeMax;
               } else {
                 adjustedValueMax = Math.min(baseNumber + 10, sliderMax); // Default to base + 10
@@ -364,6 +471,13 @@ export default function LearningPhase() {
           </div>
         )}
       </div>
+
+      {/* Achievements Dialog */}
+      <AchievementsDialog
+        achievements={state.currentProfile?.achievements || []}
+        isOpen={showAchievementsDialog}
+        onClose={() => setShowAchievementsDialog(false)}
+      />
     </div>
   );
 }

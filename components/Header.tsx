@@ -29,6 +29,7 @@ export default function Header() {
         name: newProfileName.trim(),
         isGuest: false,
         stats: [],
+        achievements: [],
         createdAt: new Date(),
         lastUsed: new Date(),
       };
