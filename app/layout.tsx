@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/contexts/AppContext";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import BuildIdChecker from "@/components/BuildIdChecker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,6 +80,7 @@ export default function RootLayout({
           {children}
         </AppProvider>
         <ServiceWorkerRegistration />
+        <BuildIdChecker />
       </body>
     </html>
   );
