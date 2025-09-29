@@ -181,6 +181,27 @@ export default function LearningPhase() {
     }
   };
 
+  const achievementsExplanation = (
+    <div className={styles.achievementsExplanation}>
+      <p>Get 100% in a test to earn your first medal:</p>
+      <ul>
+        <li>
+          <strong>Bronze:</strong> Complete up to 9 calculations
+        </li>
+        <li>
+          <strong>Silver:</strong> Complete up to 15 calculations
+        </li>
+        <li>
+          <strong>Gold:</strong> Complete all 19 calculations
+        </li>
+        <li>
+          <strong>Rainbow:</strong> Get gold in all 4 operations for the same
+          number
+        </li>
+      </ul>
+    </div>
+  );
+
   return (
     <div className={styles.container}>
       <GradientHeader
@@ -280,28 +301,12 @@ export default function LearningPhase() {
                       >
                         View All Achievements
                       </Button>
+                      {achievementsExplanation}
                     </>
                   ) : (
                     <div className={styles.noAchievements}>
                       <p>No achievements yet!</p>
-                      <p>Get 100% in a test to earn your first medal:</p>
-                      <ul>
-                        <li>
-                          <strong>Bronze:</strong> Complete 9 or fewer
-                          calculations
-                        </li>
-                        <li>
-                          <strong>Silver:</strong> Complete 15 or fewer
-                          calculations
-                        </li>
-                        <li>
-                          <strong>Gold:</strong> Complete all 19 calculations
-                        </li>
-                        <li>
-                          <strong>Rainbow:</strong> Get gold in all 4 operations
-                          for the same number
-                        </li>
-                      </ul>
+                      {achievementsExplanation}
                     </div>
                   )}
                 </div>

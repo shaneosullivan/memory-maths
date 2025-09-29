@@ -536,6 +536,18 @@
   transform: none;
 }
 
+.achievementsExplanation {
+  text-align: left;
+  margin-top: var(--space-4);
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.achievementsExplanation ul {
+  margin-top: var(--space-2);
+}
+
 /* Mobile Responsive */
 @media (max-width: 1024px) {
   .stepContainer {

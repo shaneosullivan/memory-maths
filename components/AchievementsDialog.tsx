@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Achievement } from "@/types";
 import { groupAchievementsByOperation } from "@/utils/achievements";
 import { Button } from "@/components/ui";
@@ -16,6 +17,21 @@ export default function AchievementsDialog({
   isOpen,
   onClose,
 }: AchievementsDialogProps) {
+  // Handle escape key to close dialog
+  useEffect(() => {
+    if (isOpen) {
+      const handleEscapeKey = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          onClose();
+        }
+      };
+      document.addEventListener("keydown", handleEscapeKey);
+      return () => {
+        document.removeEventListener("keydown", handleEscapeKey);
+      };
+    }
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const groupedAchievements = groupAchievementsByOperation(achievements);
@@ -43,19 +59,6 @@ export default function AchievementsDialog({
                 </div>
               </div>
               <div className={styles.achievementInfo}>
-                {/* <div className={styles.achievementName}>
-                  {achievement.type.charAt(0).toUpperCase() +
-                    achievement.type.slice(1)}{" "}
-                  Medal
-                </div> */}
-                {/* <div className={styles.achievementDetails}>
-                  {achievement.operation === "all"
-                    ? `Master of ${achievement.baseNumber}`
-                    : `${
-                        achievement.operation.charAt(0).toUpperCase() +
-                        achievement.operation.slice(1)
-                      } ${achievement.baseNumber}`}
-                </div> */}
                 <div className={styles.achievementDate}>
                   {new Date(achievement.earnedAt).toLocaleDateString()}
                 </div>
