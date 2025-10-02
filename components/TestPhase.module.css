@@ -326,12 +326,18 @@
   margin-bottom: var(--space-10);
 }
 
-.breakdown h3 {
+.breakdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.breakdownHeader h3 {
   font-size: var(--text-2xl);
   font-weight: 700;
-  margin-bottom: var(--space-6);
+  margin: 0;
   color: var(--foreground);
-  text-align: left;
 }
 
 .questionList {

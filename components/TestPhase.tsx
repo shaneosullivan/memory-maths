@@ -352,7 +352,20 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
           )}
 
           <div className={styles.breakdown}>
-            <h3>Question Breakdown</h3>
+            <div className={styles.breakdownHeader}>
+              <h3>Question Breakdown</h3>
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={() => {
+                  setHasProcessedCompletion(false);
+                  navigateToPhase("test");
+                  moveToPhase("test");
+                }}
+              >
+                Retry Test
+              </Button>
+            </div>
             <div className={styles.questionList}>
               {state.calculations.map((calc) => (
                 <div
@@ -382,19 +395,6 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
           <FloatingButton onClick={handleBackToLearning}>
             Start New Session
           </FloatingButton>
-          <div className={styles.actions}>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => {
-                setHasProcessedCompletion(false);
-                navigateToPhase("test");
-                moveToPhase("test");
-              }}
-            >
-              Retry Test
-            </Button>
-          </div>
         </div>
       </div>
     );
