@@ -128,7 +128,7 @@
   gap: var(--space-4);
   font-size: 3rem;
   font-weight: 700;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -177,10 +177,6 @@
   transform: translateY(-1px);
 }
 
-.multipleChoice {
-  margin-top: var(--space-2);
-}
-
 .multipleChoice p {
   font-size: var(--text-lg);
   font-weight: 600;
@@ -190,7 +186,7 @@
 
 .choiceButtons {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-4);
 }
 
@@ -411,13 +407,8 @@
   }
 
   .choiceButtons {
-    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-2);
-  }
-
-  .choiceButton {
-    padding: var(--space-3) var(--space-2);
-    font-size: var(--text-base);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .summary {
