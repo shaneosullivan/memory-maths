@@ -408,6 +408,19 @@
   font-weight: 500;
 }
 
+.selectContainer {
+  margin-bottom: var(--space-4);
+}
+
+.useExistingButton {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3) !important;
+}
+
+.useExistingButton:hover:not(:disabled) {
+  box-shadow: 0 15px 35px rgba(79, 172, 254, 0.4) !important;
+}
+
 @media (max-width: 768px) {
   .card {
     padding: 24px;

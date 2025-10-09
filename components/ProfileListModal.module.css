@@ -1,0 +1,236 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-6);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-3xl);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0;
+}
+
+.closeButton {
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: var(--radius-lg);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  line-height: 1;
+  padding: 0;
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.9);
+  transform: rotate(90deg);
+}
+
+.profileList {
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  max-height: calc(90vh - 100px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.profileList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.profileList::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-full);
+  margin: var(--space-2) 0;
+}
+
+.profileList::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-full);
+}
+
+.profileList::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.profileItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.profileItem:hover {
+  border-color: rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.profileButton {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.profileButton:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.profileName {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.profileStats {
+  font-size: var(--text-sm);
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  padding: var(--space-4);
+  margin-right: var(--space-2);
+  cursor: pointer;
+  color: #f5576c;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.deleteButton:hover {
+  background: rgba(245, 87, 108, 0.15);
+  color: #f5576c;
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.emptyHint {
+  margin-top: var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+  .backdrop {
+    padding: var(--space-4);
+  }
+
+  .modal {
+    max-height: 85vh;
+  }
+
+  .header {
+    padding: var(--space-5) var(--space-5) var(--space-3);
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .profileList {
+    padding: var(--space-3) var(--space-4) var(--space-5);
+    max-height: calc(85vh - 90px);
+  }
+
+  .profileName {
+    font-size: var(--text-base);
+  }
+
+  .profileStats {
+    font-size: var(--text-xs);
+  }
+}

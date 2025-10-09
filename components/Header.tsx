@@ -4,53 +4,24 @@ import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
-import { Button, Input, ButtonLink } from "@/components/ui";
+import { Button, ButtonLink } from "@/components/ui";
 import styles from "./Header.module.css";
 import { LOCAL_STORAGE_PROFILES_KEY } from "@/lib/consts";
 import { localStorage } from "@/utils/storage";
 
 export default function Header() {
-  const { state, switchProfile, deleteProfile } = useApp();
+  const { state, dispatch, switchProfile } = useApp();
   const { setProfileId, getCurrentState } = useUrlNavigation();
   const [showDropdown, setShowDropdown] = useState(false);
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newProfileName, setNewProfileName] = useState("");
 
   useEffect(() => {
-    const savedProfiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
+    const savedProfiles = localStorage.getJSONItem<Profile[]>(
+      LOCAL_STORAGE_PROFILES_KEY,
+      []
+    );
     setProfiles(savedProfiles);
   }, []);
-
-  const handleCreateProfile = () => {
-    if (newProfileName.trim()) {
-      const profile: Profile = {
-        id: Date.now().toString(),
-        name: newProfileName.trim(),
-        isGuest: false,
-        stats: [],
-        achievements: [],
-        createdAt: new Date(),
-        lastUsed: new Date(),
-      };
-
-      const updatedProfiles = [...profiles, profile];
-      setProfiles(updatedProfiles);
-      localStorage.setItem(LOCAL_STORAGE_PROFILES_KEY, updatedProfiles);
-
-      switchProfile(profile);
-      setProfileId(profile.id);
-      setNewProfileName("");
-      setShowCreateForm(false);
-      setShowDropdown(false);
-    }
-  };
-
-  const handleDeleteProfile = (profileId: string) => {
-    const updatedProfiles = profiles.filter((p) => p.id !== profileId);
-    setProfiles(updatedProfiles);
-    deleteProfile(profileId);
-  };
 
   const handleSwitchProfile = (profile: Profile) => {
     switchProfile(profile);
@@ -88,81 +59,50 @@ export default function Header() {
 
             {showDropdown && (
               <div className={styles.dropdown}>
-                {profiles.map((profile) => (
-                  <div key={profile.id} className={styles.profileItem}>
-                    <Button
-                      variant="ghost"
-                      className={styles.profileOption}
-                      onClick={() => handleSwitchProfile(profile)}
-                    >
-                      <div>
-                        <div className={styles.profileName}>{profile.name}</div>
-                        <div className={styles.profileStats}>
-                          {profile.stats.length} sessions
+                <div className={styles.profileListContainer}>
+                  {profiles.map((profile) => (
+                    <div key={profile.id} className={styles.profileItem}>
+                      <Button
+                        variant="ghost"
+                        className={styles.profileOption}
+                        onClick={() => handleSwitchProfile(profile)}
+                      >
+                        <div>
+                          <div className={styles.profileName}>{profile.name}</div>
+                          <div className={styles.profileStats}>
+                            {profile.stats.length} sessions
+                          </div>
                         </div>
-                      </div>
-                    </Button>
-                    {!profile.isGuest && (
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        className={styles.deleteButton}
-                        onClick={() => handleDeleteProfile(profile.id)}
-                      >
-                        ×
                       </Button>
-                    )}
-                  </div>
-                ))}
-
-                {/* <div className={styles.dropdownSeparator} /> */}
-
-                {!showCreateForm ? (
-                  <Button
-                    variant="primary"
-                    size="md"
-                    fullWidth
-                    onClick={() => setShowCreateForm(true)}
-                    icon="+"
-                    className={styles.createButton}
-                  >
-                    Create New Profile
-                  </Button>
-                ) : (
-                  <div className={styles.createForm}>
-                    <Input
-                      size="md"
-                      fullWidth
-                      placeholder="Enter your name..."
-                      value={newProfileName}
-                      onChange={(e) => setNewProfileName(e.target.value)}
-                      onKeyDown={(e) =>
-                        e.key === "Enter" && handleCreateProfile()
-                      }
-                      autoFocus
-                    />
-                    <div className={styles.formButtons}>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={handleCreateProfile}
-                        disabled={!newProfileName.trim()}
-                      >
-                        Create
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => {
-                          setShowCreateForm(false);
-                          setNewProfileName("");
-                        }}
-                      >
-                        Cancel
-                      </Button>
+                      {/* {!profile.isGuest && (
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          className={styles.deleteButton}
+                          onClick={() => handleDeleteProfile(profile.id)}
+                        >
+                          ×
+                        </Button>
+                      )} */}
                     </div>
-                  </div>
-                )}
+                  ))}
+                </div>
+
+                <div className={styles.dropdownSeparator} />
+
+                <Button
+                  variant="secondary"
+                  size="md"
+                  fullWidth
+                  onClick={() => {
+                    dispatch({ type: "SET_PROFILE", payload: null });
+                    setProfileId("");
+                    setShowDropdown(false);
+                  }}
+                  className={styles.switchProfileButton}
+                >
+                  Switch Profile
+                </Button>
               </div>
             )}
           </div>

@@ -156,15 +156,48 @@
   position: absolute;
   top: calc(100% + var(--space-2));
   right: 0;
-  width: fit-content;
-  background: rgba(255, 255, 255, 0.95);
+  min-width: 280px;
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.2);
   border-radius: var(--radius-xl);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2),
+              0 10px 30px rgba(102, 126, 234, 0.15),
+              0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   z-index: 100;
-  overflow: visible;
-  animation: dropdownEnter 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  animation: dropdownEnter 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  padding: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+.profileListContainer {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 400px;
+  padding: 0;
+  margin: 0;
+}
+
+.profileListContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.profileListContainer::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-full);
+  margin: var(--space-2) 0;
+}
+
+.profileListContainer::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: var(--radius-full);
+}
+
+.profileListContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.5);
 }
 
 @keyframes dropdownEnter {
@@ -187,30 +220,51 @@
 .profileOption {
   flex: 1;
   display: block;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-4) var(--space-4);
   text-align: left;
-  background: none;
+  background: transparent;
   border: none;
-  transition: background-color var(--transition-fast);
+  transition: all var(--transition-fast);
   border-radius: var(--radius-lg);
-  margin: var(--space-1);
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.profileOption::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.08));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  border-radius: inherit;
 }
 
 .profileOption:hover {
-  background: rgba(0, 102, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.05));
+  transform: translateX(4px);
+}
+
+.profileOption:hover::before {
+  opacity: 1;
 }
 
 .profileName {
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   font-weight: 600;
-  color: var(--foreground);
+  color: rgba(0, 0, 0, 0.9);
   margin-bottom: var(--space-1);
+  position: relative;
+  z-index: 1;
 }
 
 .profileStats {
-  font-size: var(--text-xs);
-  color: var(--foreground-muted);
+  font-size: var(--text-sm);
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
 }
 
 .deleteButton {
@@ -236,33 +290,34 @@
 }
 
 .dropdownSeparator {
-  height: 1px;
+  height: 2px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--border-muted) 20%,
-    var(--border-muted) 80%,
+    rgba(102, 126, 234, 0.2) 20%,
+    rgba(118, 75, 162, 0.2) 80%,
     transparent 100%
   );
-  margin: var(--space-3) var(--space-4);
+  margin: var(--space-3) 0;
   position: relative;
+  border-radius: var(--radius-full);
 }
 
 .dropdownSeparator::before {
   content: "";
   position: absolute;
-  top: -2px;
+  top: -3px;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
-  height: 5px;
+  width: 30px;
+  height: 8px;
   background: linear-gradient(
     90deg,
-    var(--brand-primary-light),
-    var(--brand-primary)
+    rgba(102, 126, 234, 0.4),
+    rgba(118, 75, 162, 0.4)
   );
   border-radius: var(--radius-full);
-  opacity: 0.3;
+  filter: blur(6px);
 }
 
 .createButton {
@@ -435,6 +490,40 @@
   color: var(--foreground);
   border-color: var(--border-focus);
   transform: translateY(-1px);
+}
+
+.switchProfileButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-fast) !important;
+}
+
+.switchProfileButton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.switchProfileButton:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+.switchProfileButton:hover::before {
+  opacity: 1;
+}
+
+.switchProfileButton:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
 }
 
 /* Mobile Responsive */

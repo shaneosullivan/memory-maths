@@ -5,16 +5,18 @@ import { useApp } from "@/contexts/AppContext";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
 import { Card, Button, Input } from "@/components/ui";
+import ProfileListModal from "./ProfileListModal";
 import styles from "./ProfileSelector.module.css";
 import { LOCAL_STORAGE_PROFILES_KEY } from "@/lib/consts";
 import { localStorage } from "@/utils/storage";
 
 export default function ProfileSelector() {
-  const { createProfile, switchProfile } = useApp();
+  const { createProfile, switchProfile, deleteProfile } = useApp();
   const { setProfileId } = useUrlNavigation();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newProfileName, setNewProfileName] = useState("");
+  const [showProfileListModal, setShowProfileListModal] = useState(false);
 
   useEffect(() => {
     const savedProfiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
@@ -38,6 +40,13 @@ export default function ProfileSelector() {
   const handleSwitchProfile = (profile: Profile) => {
     switchProfile(profile);
     setProfileId(profile.id);
+    setShowProfileListModal(false);
+  };
+
+  const handleDeleteProfile = (profileId: string) => {
+    const updatedProfiles = profiles.filter((p) => p.id !== profileId);
+    setProfiles(updatedProfiles);
+    deleteProfile(profileId);
   };
 
   return (
@@ -54,24 +63,16 @@ export default function ProfileSelector() {
 
         {profiles.length > 0 && (
           <div className={styles.section}>
-            <h2>✨ Your Profiles</h2>
-            <div className={styles.profileList}>
-              {profiles.map((profile) => (
-                <button
-                  key={`profile_${profile.id}`}
-                  className={styles.profileButton}
-                  onClick={() => handleSwitchProfile(profile)}
-                >
-                  <div>
-                    <div className={styles.profileName}>{profile.name}</div>
-                    <div className={styles.profileStats}>
-                      📊 {profile.stats.length} sessions completed
-                    </div>
-                  </div>
-                  <div className={styles.profileArrow}>→</div>
-                </button>
-              ))}
-            </div>
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={() => setShowProfileListModal(true)}
+              icon="👤"
+              className={styles.useExistingButton}
+            >
+              Use Existing Profile
+            </Button>
           </div>
         )}
 
@@ -134,6 +135,15 @@ export default function ProfileSelector() {
           <p className={styles.guestNote}>💡 Guest progress won't be saved</p>
         </div>
       </Card>
+
+      {showProfileListModal && (
+        <ProfileListModal
+          profiles={profiles}
+          onSelectProfile={handleSwitchProfile}
+          onDeleteProfile={handleDeleteProfile}
+          onClose={() => setShowProfileListModal(false)}
+        />
+      )}
     </div>
   );
 }
