@@ -65,7 +65,6 @@
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   position: relative;
   z-index: 1;
-  animation: cardEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card::before {
@@ -78,17 +77,6 @@
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   border-radius: inherit;
   pointer-events: none;
-}
-
-@keyframes cardEnter {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
 
 .title {
