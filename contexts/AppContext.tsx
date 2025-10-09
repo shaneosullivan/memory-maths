@@ -1,25 +1,8 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useReducer,
-  useEffect,
-  useRef,
-  ReactNode,
-} from "react";
-import {
-  AppState,
-  Profile,
-  Operation,
-  Phase,
-  Calculation,
-  SessionStats,
-} from "@/types";
-import {
-  LOCAL_STORAGE_CURRENT_PROFILE_KEY,
-  LOCAL_STORAGE_PROFILES_KEY,
-} from "@/lib/consts";
+import { createContext, useContext, useReducer, useEffect, useRef, ReactNode } from "react";
+import { AppState, Profile, Operation, Phase, Calculation, SessionStats } from "@/types";
+import { LOCAL_STORAGE_CURRENT_PROFILE_KEY, LOCAL_STORAGE_PROFILES_KEY } from "@/lib/consts";
 import { localStorage } from "@/utils/storage";
 
 interface AppContextType {
@@ -42,7 +25,10 @@ interface AppContextType {
     isSquareNumbers?: boolean;
   }) => void;
   moveToPhase: (phase: Phase) => void;
-  submitAnswer: (answer: number, toasterCallback?: (category: 'correct' | 'wrong', x: number, y: number) => void) => void;
+  submitAnswer: (
+    answer: number,
+    toasterCallback?: (category: "correct" | "wrong", x: number, y: number) => void
+  ) => void;
   skipQuestion: () => void;
   showMultipleChoice: () => void;
 }
@@ -153,8 +139,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       } else {
         // Profile ID specified but not found - remove it from URL to avoid confusion
         const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.delete('profileId');
-        window.history.replaceState({}, '', currentUrl.toString());
+        currentUrl.searchParams.delete("profileId");
+        window.history.replaceState({}, "", currentUrl.toString());
       }
     } else {
       // Fallback to saved profile
@@ -177,9 +163,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const saveProfile = (profile: Profile) => {
     const profiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
-    const existingIndex = profiles.findIndex(
-      (p: Profile) => p.id === profile.id
-    );
+    const existingIndex = profiles.findIndex((p: Profile) => p.id === profile.id);
 
     if (existingIndex >= 0) {
       profiles[existingIndex] = profile;
@@ -233,7 +217,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Update the profile in localStorage
     const profiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
     const profileIndex = profiles.findIndex((p: Profile) => p.id === updatedProfile.id);
-    
+
     if (profileIndex >= 0) {
       profiles[profileIndex] = updatedProfile;
       localStorage.setItem(LOCAL_STORAGE_PROFILES_KEY, profiles);
@@ -353,7 +337,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const submitAnswer = (answer: number, toasterCallback?: (category: 'correct' | 'wrong', x: number, y: number) => void) => {
+  const submitAnswer = (
+    answer: number,
+    toasterCallback?: (category: "correct" | "wrong", x: number, y: number) => void
+  ) => {
     const currentCalc = state.calculations[state.currentCalculationIndex];
     // For division, allow small rounding errors
     const isCorrect =
@@ -369,13 +356,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (toasterCallback) {
       // Only execute if no toaster is currently pending (debounce)
       if (!toasterDebounceRef.current) {
-        const submitButton = document.querySelector('[data-keypad-enter]') as HTMLElement;
+        const submitButton = document.querySelector("[data-keypad-enter]") as HTMLElement;
         if (submitButton) {
           const rect = submitButton.getBoundingClientRect();
           const x = rect.left + rect.width / 2;
           const y = rect.top + rect.height / 2;
-          toasterCallback(isCorrect ? 'correct' : 'wrong', x, y);
-          
+          toasterCallback(isCorrect ? "correct" : "wrong", x, y);
+
           // Set debounce period to prevent additional calls
           toasterDebounceRef.current = setTimeout(() => {
             toasterDebounceRef.current = null;

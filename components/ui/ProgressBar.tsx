@@ -1,6 +1,6 @@
 "use client";
 
-import styles from './ProgressBar.module.css';
+import styles from "./ProgressBar.module.css";
 
 interface ProgressBarProps {
   correctCount: number;
@@ -9,15 +9,15 @@ interface ProgressBarProps {
   className?: string;
 }
 
-export default function ProgressBar({ 
-  correctCount, 
-  incorrectCount, 
+export default function ProgressBar({
+  correctCount,
+  incorrectCount,
   totalCount,
-  className = ''
+  className = "",
 }: ProgressBarProps) {
   const correctPercentage = (correctCount / totalCount) * 100;
   const incorrectPercentage = (incorrectCount / totalCount) * 100;
-  
+
   return (
     <div className={`${styles.progressBar} ${className}`}>
       {correctCount <= incorrectCount ? (
@@ -30,7 +30,7 @@ export default function ProgressBar({
             className={`${styles.progressIncorrect} ${styles.progressRight}`}
             style={{
               width: `${incorrectPercentage}%`,
-              left: `${correctPercentage}%`
+              left: `${correctPercentage}%`,
             }}
           />
         </>
@@ -44,7 +44,7 @@ export default function ProgressBar({
             className={`${styles.progressCorrect} ${styles.progressRight}`}
             style={{
               width: `${correctPercentage}%`,
-              left: `${incorrectPercentage}%`
+              left: `${incorrectPercentage}%`,
             }}
           />
         </>

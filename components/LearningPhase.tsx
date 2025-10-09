@@ -7,13 +7,7 @@ import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import RangeSliderWrapper from "@/components/RangeSliderWrapper";
 import BackButton from "@/components/BackButton";
 import AchievementsDialog from "@/components/AchievementsDialog";
-import {
-  GradientHeader,
-  NumberGrid,
-  Button,
-  Card,
-  FloatingButton,
-} from "@/components/ui";
+import { GradientHeader, NumberGrid, Button, Card, FloatingButton } from "@/components/ui";
 import styles from "./LearningPhase.module.css";
 
 export default function LearningPhase() {
@@ -149,11 +143,9 @@ export default function LearningPhase() {
 
   // Check if all answers are visible or hidden
   const allAnswersVisible =
-    state.calculations.length > 0 &&
-    state.calculations.every((calc) => calc.showAnswer);
+    state.calculations.length > 0 && state.calculations.every((calc) => calc.showAnswer);
   const allAnswersHidden =
-    state.calculations.length > 0 &&
-    state.calculations.every((calc) => !calc.showAnswer);
+    state.calculations.length > 0 && state.calculations.every((calc) => !calc.showAnswer);
 
   const getStepTitle = () => {
     switch (currentStep) {
@@ -195,8 +187,7 @@ export default function LearningPhase() {
           <strong>Gold:</strong> Complete all 19 calculations
         </li>
         <li>
-          <strong>Rainbow:</strong> Get gold in all 4 operations for the same
-          number
+          <strong>Rainbow:</strong> Get gold in all 4 operations for the same number
         </li>
       </ul>
     </div>
@@ -204,11 +195,7 @@ export default function LearningPhase() {
 
   return (
     <div className={styles.container}>
-      <GradientHeader
-        variant="learning"
-        title={getStepTitle()}
-        subtitle={getStepDescription()}
-      />
+      <GradientHeader variant="learning" title={getStepTitle()} subtitle={getStepDescription()} />
 
       <div className={styles.stepContainer}>
         {currentStep === "operation" && (
@@ -244,9 +231,8 @@ export default function LearningPhase() {
                           />
                           <span>
                             {
-                              state.currentProfile.achievements.filter(
-                                (a) => a.type === "bronze"
-                              ).length
+                              state.currentProfile.achievements.filter((a) => a.type === "bronze")
+                                .length
                             }
                           </span>
                         </div>
@@ -258,9 +244,8 @@ export default function LearningPhase() {
                           />
                           <span>
                             {
-                              state.currentProfile.achievements.filter(
-                                (a) => a.type === "silver"
-                              ).length
+                              state.currentProfile.achievements.filter((a) => a.type === "silver")
+                                .length
                             }
                           </span>
                         </div>
@@ -272,9 +257,8 @@ export default function LearningPhase() {
                           />
                           <span>
                             {
-                              state.currentProfile.achievements.filter(
-                                (a) => a.type === "gold"
-                              ).length
+                              state.currentProfile.achievements.filter((a) => a.type === "gold")
+                                .length
                             }
                           </span>
                         </div>
@@ -286,9 +270,8 @@ export default function LearningPhase() {
                           />
                           <span>
                             {
-                              state.currentProfile.achievements.filter(
-                                (a) => a.type === "rainbow"
-                              ).length
+                              state.currentProfile.achievements.filter((a) => a.type === "rainbow")
+                                .length
                             }
                           </span>
                         </div>
@@ -360,11 +343,7 @@ export default function LearningPhase() {
 
             {urlState.isSquareNumbers && (
               <div className={styles.stepActions}>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onClick={() => navigateToStep("range")}
-                >
+                <Button variant="primary" size="lg" onClick={() => navigateToStep("range")}>
                   Continue
                 </Button>
               </div>
@@ -379,8 +358,7 @@ export default function LearningPhase() {
 
             // Set slider range based on operation type
             const sliderMin = operation === "subtraction" ? baseNumber : 2;
-            const sliderMax =
-              operation === "subtraction" ? baseNumber + 20 : 20;
+            const sliderMax = operation === "subtraction" ? baseNumber + 20 : 20;
 
             // Adjust current values to fit within the new range
             const currentMin = urlState.rangeMin || state.rangeMin;
@@ -408,10 +386,7 @@ export default function LearningPhase() {
             } else {
               // For other operations, use existing logic
               adjustedValueMin = Math.max(currentMin, sliderMin);
-              adjustedValueMax = Math.min(
-                Math.max(currentMax, adjustedValueMin + 1),
-                sliderMax
-              );
+              adjustedValueMax = Math.min(Math.max(currentMax, adjustedValueMin + 1), sliderMax);
             }
 
             return (
@@ -426,9 +401,7 @@ export default function LearningPhase() {
                     handleRangeChange(min, max);
                   }}
                 />
-                <FloatingButton onClick={handleRangeConfirm}>
-                  Generate Calculations
-                </FloatingButton>
+                <FloatingButton onClick={handleRangeConfirm}>Generate Calculations</FloatingButton>
               </div>
             );
           })()}
@@ -458,17 +431,12 @@ export default function LearningPhase() {
             </div>
             <div className={styles.calculationsGrid}>
               {state.calculations.map((calc, index) => (
-                <CalculationCard
-                  key={`calc_${calc.id}`}
-                  calculation={calc}
-                  index={index}
-                />
+                <CalculationCard key={`calc_${calc.id}`} calculation={calc} index={index} />
               ))}
             </div>
 
             <p className={styles.practiceInstructions}>
-              When you are happy that you know all these answers well, click the
-              button below
+              When you are happy that you know all these answers well, click the button below
             </p>
             <FloatingButton onClick={handleMoveToPractice} size="xl">
               Go Practice!
@@ -487,13 +455,7 @@ export default function LearningPhase() {
   );
 }
 
-function CalculationCard({
-  calculation,
-  index,
-}: {
-  calculation: any;
-  index: number;
-}) {
+function CalculationCard({ calculation, index }: { calculation: any; index: number }) {
   const { dispatch } = useApp();
 
   const toggleAnswer = () => {
@@ -520,20 +482,12 @@ function CalculationCard({
   };
 
   return (
-    <Card
-      variant="elevated"
-      padding="md"
-      className={styles.calculationCard}
-      onClick={toggleAnswer}
-    >
+    <Card variant="elevated" padding="md" className={styles.calculationCard} onClick={toggleAnswer}>
       <div className={styles.calculation}>
-        {calculation.operand1} {getOperationSymbol(calculation.operation)}{" "}
-        {calculation.operand2}
+        {calculation.operand1} {getOperationSymbol(calculation.operation)} {calculation.operand2}
       </div>
       <div className={styles.equals}>=</div>
-      <div className={styles.answer}>
-        {calculation.showAnswer ? calculation.answer : "?"}
-      </div>
+      <div className={styles.answer}>{calculation.showAnswer ? calculation.answer : "?"}</div>
     </Card>
   );
 }

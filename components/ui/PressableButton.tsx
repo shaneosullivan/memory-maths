@@ -35,16 +35,13 @@ interface PressableButtonProps extends Omit<ButtonProps, "onClick"> {
  * Wraps the standard Button component with gesture detection logic.
  */
 export default function PressableButton(props: PressableButtonProps) {
-  const {
-    onPress,
-    moveThreshold = 10,
-    disabled,
-    className,
-    ...rest
-  } = props;
+  const { onPress, moveThreshold = 10, disabled, className, ...rest } = props;
 
   const [isActive, setIsActive] = useState(false);
-  const [touchStartPos, setTouchStartPos] = useState<{ x: number; y: number } | null>(null);
+  const [touchStartPos, setTouchStartPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const handlePress = () => {
     if (!disabled) {

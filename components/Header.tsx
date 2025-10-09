@@ -16,10 +16,7 @@ export default function Header() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
 
   useEffect(() => {
-    const savedProfiles = localStorage.getJSONItem<Profile[]>(
-      LOCAL_STORAGE_PROFILES_KEY,
-      []
-    );
+    const savedProfiles = localStorage.getJSONItem<Profile[]>(LOCAL_STORAGE_PROFILES_KEY, []);
     setProfiles(savedProfiles);
   }, []);
 
@@ -34,9 +31,7 @@ export default function Header() {
       <div className={styles.container}>
         <div className={styles.left}>
           <ButtonLink
-            href={`/?phase=learning&profileId=${
-              getCurrentState().profileId || "guest"
-            }`}
+            href={`/?phase=learning&profileId=${getCurrentState().profileId || "guest"}`}
             variant="ghost"
             className={styles.titleLink}
           >
@@ -49,10 +44,7 @@ export default function Header() {
 
         <div className={styles.right}>
           <div className={styles.profileDropdown}>
-            <button
-              className={styles.profileButton}
-              onClick={() => setShowDropdown(!showDropdown)}
-            >
+            <button className={styles.profileButton} onClick={() => setShowDropdown(!showDropdown)}>
               {state.currentProfile?.name}
               <span className={styles.arrow}>▼</span>
             </button>
@@ -69,9 +61,7 @@ export default function Header() {
                       >
                         <div>
                           <div className={styles.profileName}>{profile.name}</div>
-                          <div className={styles.profileStats}>
-                            {profile.stats.length} sessions
-                          </div>
+                          <div className={styles.profileStats}>{profile.stats.length} sessions</div>
                         </div>
                       </Button>
                       {/* {!profile.isGuest && (

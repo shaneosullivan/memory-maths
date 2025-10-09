@@ -10,7 +10,9 @@ import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/com
 import styles from "./PracticePhase.module.css";
 
 interface PracticePhaseProps {
-  toasterRef: React.RefObject<{ showToaster: (category: 'correct' | 'wrong', x: number, y: number) => void } | null>;
+  toasterRef: React.RefObject<{
+    showToaster: (category: "correct" | "wrong", x: number, y: number) => void;
+  } | null>;
 }
 
 export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
@@ -26,13 +28,10 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
     setRangeMax,
     setIsSquareNumbers,
   } = useApp();
-  const { navigateToPhase, getCurrentState, setCurrentIndex } =
-    useUrlNavigation();
+  const { navigateToPhase, getCurrentState, setCurrentIndex } = useUrlNavigation();
   const [currentInput, setCurrentInput] = useState("");
   const [showMultipleChoice, setShowMultipleChoice] = useState(false);
-  const [multipleChoiceOptions, setMultipleChoiceOptions] = useState<number[]>(
-    []
-  );
+  const [multipleChoiceOptions, setMultipleChoiceOptions] = useState<number[]>([]);
 
   // Sync AppContext with URL state when component mounts
   useEffect(() => {
@@ -59,10 +58,7 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
     }
 
     // If we have operation but no calculations, generate them (use defaults for missing ranges)
-    if (
-      urlState.operation &&
-      state.calculations.length === 0
-    ) {
+    if (urlState.operation && state.calculations.length === 0) {
       generateCalculations({
         operation: urlState.operation,
         baseNumber: urlState.baseNumber || state.baseNumber || 2,
@@ -113,9 +109,9 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
   }, []); // Only run once on mount
 
   const currentCalculation = state.calculations[state.currentCalculationIndex];
-  const isComplete = state.calculations.length > 0 && state.calculations.every(
-    (calc) => calc.userAnswer !== undefined || calc.skipped
-  );
+  const isComplete =
+    state.calculations.length > 0 &&
+    state.calculations.every((calc) => calc.userAnswer !== undefined || calc.skipped);
   const completedCount = state.calculations.filter(
     (calc) => calc.userAnswer !== undefined || calc.skipped
   ).length;
@@ -214,18 +210,14 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
         <div className={styles.error}>
           <h2>No calculations available</h2>
           <p>Please go back to the Learning Phase to generate calculations.</p>
-          <BackButton fallbackPath="?phase=learning">
-            Back to Learning
-          </BackButton>
+          <BackButton fallbackPath="?phase=learning">Back to Learning</BackButton>
         </div>
       </div>
     );
   }
 
   if (isComplete) {
-    const correctAnswers = state.calculations.filter(
-      (calc) => calc.isCorrect
-    ).length;
+    const correctAnswers = state.calculations.filter((calc) => calc.isCorrect).length;
     const totalQuestions = state.calculations.length;
     const accuracy = Math.round((correctAnswers / totalQuestions) * 100);
 
@@ -284,30 +276,22 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
             totalCount={state.calculations.length}
           />
           <div className={styles.progressText}>
-            {completedCount} / {state.calculations.length} ({correctCount}{" "}
-            correct, {incorrectCount} incorrect)
+            {completedCount} / {state.calculations.length} ({correctCount} correct, {incorrectCount}{" "}
+            incorrect)
           </div>
         </div>
         <div className={styles.mistakes}>Mistakes: {state.sessionMistakes}</div>
       </GradientHeader>
 
       <div className={styles.content}>
-        <Card
-          variant="elevated"
-          padding="lg"
-          className={styles.questionSection}
-        >
+        <Card variant="elevated" padding="lg" className={styles.questionSection}>
           <BackButton />
           <div className={styles.question}>
-            <span className={styles.operand}>
-              {currentCalculation.operand1}
-            </span>
+            <span className={styles.operand}>{currentCalculation.operand1}</span>
             <span className={styles.operator}>
               {getOperationSymbol(currentCalculation.operation)}
             </span>
-            <span className={styles.operand}>
-              {currentCalculation.operand2}
-            </span>
+            <span className={styles.operand}>{currentCalculation.operand2}</span>
             <span className={styles.equals}>=</span>
             <span className={styles.answer}>{currentInput || "?"}</span>
           </div>
@@ -341,10 +325,7 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
         </Card>
 
         <Card variant="elevated" padding="md" className={styles.keypadSection}>
-          <Keypad
-            onInput={handleKeypadInput}
-            showDecimal={state.operation === "division"}
-          />
+          <Keypad onInput={handleKeypadInput} showDecimal={state.operation === "division"} />
         </Card>
       </div>
     </div>

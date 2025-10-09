@@ -56,8 +56,7 @@ export default function ProfileSelector() {
           <div className={styles.mathIcon}>∑</div>
           <h1 className={styles.title}>Memory Maths</h1>
           <p className={styles.subtitle}>
-            Master arithmetic through memory training and unlock your
-            mathematical potential
+            Master arithmetic through memory training and unlock your mathematical potential
           </p>
         </div>
 
@@ -123,13 +122,7 @@ export default function ProfileSelector() {
         </div>
 
         <div className={styles.section}>
-          <Button
-            variant="glass"
-            size="lg"
-            fullWidth
-            onClick={handleUseGuest}
-            icon="🎯"
-          >
+          <Button variant="glass" size="lg" fullWidth onClick={handleUseGuest} icon="🎯">
             Continue as Guest
           </Button>
           <p className={styles.guestNote}>💡 Guest progress won't be saved</p>

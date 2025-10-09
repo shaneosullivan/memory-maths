@@ -21,8 +21,7 @@ export default function BackButton({
   const router = useRouter();
 
   const backUrl = getBackUrl();
-  const targetUrl =
-    backUrl !== "/?phase=learning" ? backUrl : fallbackPath || "/";
+  const targetUrl = backUrl !== "/?phase=learning" ? backUrl : fallbackPath || "/";
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();

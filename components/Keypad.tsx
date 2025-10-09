@@ -56,12 +56,7 @@ export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
         <div key={`keypad_row_${rowIndex}`} className={styles.row}>
           {row.map((key, keyIndex) => {
             if (key === "") {
-              return (
-                <div
-                  key={`keypad_col_${keyIndex}`}
-                  className={styles.emptyCell}
-                />
-              );
+              return <div key={`keypad_col_${keyIndex}`} className={styles.emptyCell} />;
             }
             return (
               <PressableButton

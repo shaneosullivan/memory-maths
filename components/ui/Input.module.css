@@ -41,7 +41,7 @@
 .glass:focus {
   border-color: var(--brand-primary);
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 
+  box-shadow:
     0 0 0 3px rgba(0, 102, 255, 0.1),
     0 8px 25px rgba(0, 0, 0, 0.1);
 }

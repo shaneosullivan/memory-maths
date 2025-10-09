@@ -37,7 +37,11 @@ const ProfileListModal = (props: ProfileListModalProps) => {
   const handleDeleteClick = (e: React.MouseEvent, profileId: string, profileName: string) => {
     e.stopPropagation();
 
-    if (window.confirm(`Are you sure you want to delete the profile "${profileName}"? This action cannot be undone.`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the profile "${profileName}"? This action cannot be undone.`
+      )
+    ) {
       onDeleteProfile(profileId);
     }
   };
@@ -47,11 +51,7 @@ const ProfileListModal = (props: ProfileListModalProps) => {
       <div className={styles.modal}>
         <div className={styles.header}>
           <h2 className={styles.title}>Select a Profile</h2>
-          <button
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label="Close modal"
-          >
+          <button className={styles.closeButton} onClick={onClose} aria-label="Close modal">
             ×
           </button>
         </div>
@@ -65,14 +65,12 @@ const ProfileListModal = (props: ProfileListModalProps) => {
           ) : (
             profiles.map((profile) => (
               <div key={profile.id} className={styles.profileItem}>
-                <button
-                  className={styles.profileButton}
-                  onClick={() => onSelectProfile(profile)}
-                >
+                <button className={styles.profileButton} onClick={() => onSelectProfile(profile)}>
                   <div className={styles.profileInfo}>
                     <div className={styles.profileName}>{profile.name}</div>
                     <div className={styles.profileStats}>
-                      {profile.stats.length} session{profile.stats.length !== 1 ? "s" : ""}
+                      {profile.stats.length} session
+                      {profile.stats.length !== 1 ? "s" : ""}
                     </div>
                   </div>
                 </button>

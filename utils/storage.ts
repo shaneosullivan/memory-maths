@@ -15,12 +15,12 @@ let localStorageAvailable = false;
  */
 function isLocalStorageAvailable(): boolean {
   if (!isLocalStorageChecked) {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       localStorageAvailable = false;
     } else {
       try {
-        const testKey = '__localStorage_test__';
-        window.localStorage.setItem(testKey, 'test');
+        const testKey = "__localStorage_test__";
+        window.localStorage.setItem(testKey, "test");
         window.localStorage.removeItem(testKey);
         localStorageAvailable = true;
       } catch {
@@ -56,7 +56,7 @@ function initializeMemoryFromLocalStorage(): void {
 }
 
 // Initialize memory storage on module load
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   initializeMemoryFromLocalStorage();
 }
 
@@ -89,7 +89,7 @@ function getItem(key: string): string | null {
  */
 function getJSONItem<T>(key: string, defaultValue: T): T {
   const item = getItem(key);
-  
+
   if (item === null) {
     return defaultValue;
   }
@@ -106,8 +106,8 @@ function getJSONItem<T>(key: string, defaultValue: T): T {
  * Always stores in memory, attempts localStorage when available
  */
 function setItem(key: string, value: StorageValue): void {
-  const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
-  
+  const stringValue = typeof value === "string" ? value : JSON.stringify(value);
+
   // Always store in memory
   memoryStorage.set(key, stringValue);
 
@@ -257,25 +257,25 @@ function syncMemoryToLocalStorage(): boolean {
 /**
  * Get the current storage mode being used
  */
-function getStorageMode(): 'localStorage' | 'memory' | 'both' {
+function getStorageMode(): "localStorage" | "memory" | "both" {
   if (isLocalStorageAvailable()) {
-    return memoryStorage.size > 0 ? 'both' : 'localStorage';
+    return memoryStorage.size > 0 ? "both" : "localStorage";
   }
-  return 'memory';
+  return "memory";
 }
 
 /**
  * Get statistics about storage usage
  */
 function getStorageStats(): {
-  mode: 'localStorage' | 'memory' | 'both';
+  mode: "localStorage" | "memory" | "both";
   memoryKeys: number;
   localStorageKeys: number;
   totalSize: number;
   isLocalStorageAvailable: boolean;
 } {
   let localStorageKeys = 0;
-  
+
   if (isLocalStorageAvailable()) {
     try {
       localStorageKeys = window.localStorage.length;

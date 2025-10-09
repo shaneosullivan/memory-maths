@@ -6,13 +6,7 @@ import { Operation, Profile, Achievement } from "@/types";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
-import {
-  GradientHeader,
-  ProgressBar,
-  Button,
-  Card,
-  FloatingButton,
-} from "@/components/ui";
+import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
 import styles from "./TestPhase.module.css";
 import { checkForNewAchievements } from "@/utils/achievements";
 
@@ -37,8 +31,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
     setIsSquareNumbers,
     updateProfile,
   } = useApp();
-  const { navigateToPhase, clearUrlState, getCurrentState, setCurrentIndex } =
-    useUrlNavigation();
+  const { navigateToPhase, clearUrlState, getCurrentState, setCurrentIndex } = useUrlNavigation();
   const [currentInput, setCurrentInput] = useState("");
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const [hasProcessedCompletion, setHasProcessedCompletion] = useState(false);
@@ -128,9 +121,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
   useEffect(() => {
     const isComplete =
       state.calculations.length > 0 &&
-      state.calculations.every(
-        (calc) => calc.userAnswer !== undefined || calc.skipped
-      );
+      state.calculations.every((calc) => calc.userAnswer !== undefined || calc.skipped);
 
     console.log("TestPhase state.operation:", state.operation);
 
@@ -154,10 +145,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
       };
 
       // Check for new achievements
-      const achievements = checkForNewAchievements(
-        state.currentProfile,
-        sessionStats
-      );
+      const achievements = checkForNewAchievements(state.currentProfile, sessionStats);
       if (achievements.length > 0) {
         setNewAchievements(achievements);
       }
@@ -170,10 +158,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
         lastUsed: new Date(),
       };
 
-      console.log(
-        "Updating profile with new stats and achievements:",
-        updatedProfile
-      );
+      console.log("Updating profile with new stats and achievements:", updatedProfile);
 
       // Use the updateProfile method to update both localStorage and in-memory state
       updateProfile(updatedProfile);
@@ -194,9 +179,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
   const currentCalculation = state.calculations[state.currentCalculationIndex];
   const isComplete =
     state.calculations.length > 0 &&
-    state.calculations.every(
-      (calc) => calc.userAnswer !== undefined || calc.skipped
-    );
+    state.calculations.every((calc) => calc.userAnswer !== undefined || calc.skipped);
   const completedCount = state.calculations.filter(
     (calc) => calc.userAnswer !== undefined || calc.skipped
   ).length;
@@ -278,21 +261,15 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
         <div className={styles.error}>
           <h2>No calculations available</h2>
           <p>Please go back to the Learning Phase to generate calculations.</p>
-          <BackButton fallbackPath="?phase=learning">
-            Back to Learning
-          </BackButton>
+          <BackButton fallbackPath="?phase=learning">Back to Learning</BackButton>
         </div>
       </div>
     );
   }
 
   if (isComplete) {
-    const correctAnswers = state.calculations.filter(
-      (calc) => calc.isCorrect
-    ).length;
-    const skippedCount = state.calculations.filter(
-      (calc) => calc.skipped
-    ).length;
+    const correctAnswers = state.calculations.filter((calc) => calc.isCorrect).length;
+    const skippedCount = state.calculations.filter((calc) => calc.skipped).length;
     const totalQuestions = state.calculations.length;
     const accuracy = Math.round((correctAnswers / totalQuestions) * 100);
 
@@ -332,9 +309,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
                     />
                     <div className={styles.achievementText}>
                       <div className={styles.achievementType}>
-                        {achievement.type.charAt(0).toUpperCase() +
-                          achievement.type.slice(1)}{" "}
-                        Medal
+                        {achievement.type.charAt(0).toUpperCase() + achievement.type.slice(1)} Medal
                       </div>
                       <div className={styles.achievementDetail}>
                         {achievement.operation === "all"
@@ -374,27 +349,23 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
                     calc.skipped
                       ? styles.skipped
                       : calc.isCorrect
-                      ? styles.correct
-                      : styles.incorrect
+                        ? styles.correct
+                        : styles.incorrect
                   }`}
                 >
                   <div className={styles.questionText}>
-                    {calc.operand1} {getOperationSymbol(calc.operation)}{" "}
-                    {calc.operand2} = {calc.answer}
+                    {calc.operand1} {getOperationSymbol(calc.operation)} {calc.operand2} ={" "}
+                    {calc.answer}
                   </div>
                   <div className={styles.userResponse}>
-                    {calc.skipped
-                      ? "Skipped"
-                      : `Your answer: ${calc.userAnswer}`}
+                    {calc.skipped ? "Skipped" : `Your answer: ${calc.userAnswer}`}
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <FloatingButton onClick={handleBackToLearning}>
-            Start New Session
-          </FloatingButton>
+          <FloatingButton onClick={handleBackToLearning}>Start New Session</FloatingButton>
         </div>
       </div>
     );
@@ -410,30 +381,22 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
             totalCount={state.calculations.length}
           />
           <div className={styles.progressText}>
-            {completedCount} / {state.calculations.length} ({correctCount}{" "}
-            correct, {incorrectCount} incorrect)
+            {completedCount} / {state.calculations.length} ({correctCount} correct, {incorrectCount}{" "}
+            incorrect)
           </div>
         </div>
         <div className={styles.mistakes}>Mistakes: {state.sessionMistakes}</div>
       </GradientHeader>
 
       <div className={styles.content}>
-        <Card
-          variant="elevated"
-          padding="lg"
-          className={styles.questionSection}
-        >
+        <Card variant="elevated" padding="lg" className={styles.questionSection}>
           <BackButton />
           <div className={styles.question}>
-            <span className={styles.operand}>
-              {currentCalculation.operand1}
-            </span>
+            <span className={styles.operand}>{currentCalculation.operand1}</span>
             <span className={styles.operator}>
               {getOperationSymbol(currentCalculation.operation)}
             </span>
-            <span className={styles.operand}>
-              {currentCalculation.operand2}
-            </span>
+            <span className={styles.operand}>{currentCalculation.operand2}</span>
             <span className={styles.equals}>=</span>
             <span className={styles.answer}>{currentInput || "?"}</span>
           </div>
@@ -446,10 +409,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
         </Card>
 
         <Card variant="elevated" padding="md" className={styles.keypadSection}>
-          <Keypad
-            onInput={handleKeypadInput}
-            showDecimal={state.operation === "division"}
-          />
+          <Keypad onInput={handleKeypadInput} showDecimal={state.operation === "division"} />
         </Card>
       </div>
     </div>

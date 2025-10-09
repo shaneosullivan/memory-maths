@@ -6,7 +6,8 @@
     "dev": "PORT=3033 next dev --turbopack",
     "build": "bun ./scripts/buildConfig && next build --turbopack",
     "start": "next start",
-    "devkill": "kill -9 $(lsof -t -i:3033)"
+    "devkill": "kill -9 $(lsof -t -i:3033)",
+    "format": "prettier --write \"**/*.{ts,tsx,css}\""
   },
   "dependencies": {
     "next": "15.5.3",
@@ -19,6 +20,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "bun": "^1.2.23",
+    "prettier": "^3.6.2",
     "typescript": "^5"
   }
 }

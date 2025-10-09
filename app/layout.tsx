@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Memory Maths",
-  description: "Practice and improve your mental arithmetic skills with Learning, Practice, and Test phases",
+  description:
+    "Practice and improve your mental arithmetic skills with Learning, Practice, and Test phases",
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -27,13 +28,12 @@ export const metadata: Metadata = {
       { url: "/icon-192.svg", type: "image/svg+xml", sizes: "192x192" },
       { url: "/icon-512.svg", type: "image/svg+xml", sizes: "512x512" },
     ],
-    apple: [
-      { url: "/icon-180.png", sizes: "180x180" },
-    ],
+    apple: [{ url: "/icon-180.png", sizes: "180x180" }],
   },
   openGraph: {
     title: "Memory Maths",
-    description: "Practice and improve your mental arithmetic skills with Learning, Practice, and Test phases",
+    description:
+      "Practice and improve your mental arithmetic skills with Learning, Practice, and Test phases",
     images: [
       {
         url: "/icon-512.png",
@@ -47,7 +47,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "Memory Maths",
-    description: "Practice and improve your mental arithmetic skills with Learning, Practice, and Test phases",
+    description:
+      "Practice and improve your mental arithmetic skills with Learning, Practice, and Test phases",
     images: ["/icon-512.png"],
   },
 };
@@ -76,9 +77,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.svg" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AppProvider>
-          {children}
-        </AppProvider>
+        <AppProvider>{children}</AppProvider>
         <ServiceWorkerRegistration />
         <BuildIdChecker />
       </body>

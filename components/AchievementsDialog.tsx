@@ -36,10 +36,7 @@ export default function AchievementsDialog({
 
   const groupedAchievements = groupAchievementsByOperation(achievements);
 
-  const renderAchievementGrid = (
-    achievements: Achievement[],
-    title?: string
-  ) => {
+  const renderAchievementGrid = (achievements: Achievement[], title?: string) => {
     if (achievements.length === 0) return null;
 
     return (
@@ -54,9 +51,7 @@ export default function AchievementsDialog({
                   alt={`${achievement.type} medal`}
                   className={styles.medalImage}
                 />
-                <div className={styles.achievementNumber}>
-                  {achievement.baseNumber}
-                </div>
+                <div className={styles.achievementNumber}>{achievement.baseNumber}</div>
               </div>
               <div className={styles.achievementInfo}>
                 <div className={styles.achievementDate}>
@@ -75,11 +70,7 @@ export default function AchievementsDialog({
       <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <h2>Your Achievements</h2>
-          <button
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label="Close dialog"
-          >
+          <button className={styles.closeButton} onClick={onClose} aria-label="Close dialog">
             ×
           </button>
         </div>
@@ -88,25 +79,14 @@ export default function AchievementsDialog({
           {achievements.length === 0 ? (
             <div className={styles.emptyState}>
               <p>No achievements yet!</p>
-              <p>
-                Complete a test with 100% accuracy to earn your first medal.
-              </p>
+              <p>Complete a test with 100% accuracy to earn your first medal.</p>
             </div>
           ) : (
             <div className={styles.achievementsList}>
-              {renderAchievementGrid(
-                groupedAchievements.rainbow,
-                "Master Achievements"
-              )}
+              {renderAchievementGrid(groupedAchievements.rainbow, "Master Achievements")}
               {renderAchievementGrid(groupedAchievements.addition, "Addition")}
-              {renderAchievementGrid(
-                groupedAchievements.subtraction,
-                "Subtraction"
-              )}
-              {renderAchievementGrid(
-                groupedAchievements.multiplication,
-                "Multiplication"
-              )}
+              {renderAchievementGrid(groupedAchievements.subtraction, "Subtraction")}
+              {renderAchievementGrid(groupedAchievements.multiplication, "Multiplication")}
               {renderAchievementGrid(groupedAchievements.division, "Division")}
             </div>
           )}

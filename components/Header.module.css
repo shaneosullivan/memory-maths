@@ -161,9 +161,10 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(102, 126, 234, 0.2);
   border-radius: var(--radius-xl);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2),
-              0 10px 30px rgba(102, 126, 234, 0.15),
-              0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 10px 30px rgba(102, 126, 234, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   z-index: 100;
   overflow: hidden;
   animation: dropdownEnter 250ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -311,11 +312,7 @@
   transform: translateX(-50%);
   width: 30px;
   height: 8px;
-  background: linear-gradient(
-    90deg,
-    rgba(102, 126, 234, 0.4),
-    rgba(118, 75, 162, 0.4)
-  );
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.4), rgba(118, 75, 162, 0.4));
   border-radius: var(--radius-full);
   filter: blur(6px);
 }
@@ -323,11 +320,7 @@
 .createButton {
   width: fit-content;
   padding: var(--space-3) var(--space-4);
-  background: linear-gradient(
-    135deg,
-    var(--brand-primary) 0%,
-    var(--brand-primary-hover) 100%
-  );
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-hover) 100%);
   border: none;
   border-radius: var(--radius-lg);
   text-align: center;
@@ -355,11 +348,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -438,11 +427,7 @@
 }
 
 .saveButton {
-  background: linear-gradient(
-    135deg,
-    var(--success) 0%,
-    var(--success-hover) 100%
-  );
+  background: linear-gradient(135deg, var(--success) 0%, var(--success-hover) 100%);
   color: white;
   border: none;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
@@ -455,11 +440,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }

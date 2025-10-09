@@ -15,10 +15,7 @@ interface RangeSliderWrapperProps {
 const RangeSliderWrapper = (props: RangeSliderWrapperProps) => {
   const { min, max, valueMin, valueMax, onRangeChange } = props;
 
-  const [valueRange, setValueRange] = useState([valueMin, valueMax] as [
-    number,
-    number
-  ]);
+  const [valueRange, setValueRange] = useState([valueMin, valueMax] as [number, number]);
 
   const handleRangeChange = (value: number[]) => {
     const [newMin, newMax] = value;

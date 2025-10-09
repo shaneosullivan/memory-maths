@@ -46,11 +46,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(0, 0, 0, 0.05)
-  );
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05));
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -81,11 +77,7 @@
 }
 
 .enterKey::before {
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.2),
-    rgba(0, 0, 0, 0.1)
-  );
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
 }
 
 .enterKey:hover {
@@ -103,11 +95,7 @@
 }
 
 .deleteKey::before {
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.2),
-    rgba(0, 0, 0, 0.1)
-  );
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
 }
 
 .deleteKey:hover {

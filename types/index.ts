@@ -1,6 +1,6 @@
-export type Operation = 'addition' | 'subtraction' | 'multiplication' | 'division';
+export type Operation = "addition" | "subtraction" | "multiplication" | "division";
 
-export type Phase = 'learning' | 'practice' | 'test';
+export type Phase = "learning" | "practice" | "test";
 
 export interface Calculation {
   id: string;
@@ -25,12 +25,12 @@ export interface SessionStats {
   phase: Phase;
 }
 
-export type AchievementType = 'bronze' | 'silver' | 'gold' | 'rainbow';
+export type AchievementType = "bronze" | "silver" | "gold" | "rainbow";
 
 export interface Achievement {
   id: string;
   type: AchievementType;
-  operation: Operation | 'all'; // 'all' for rainbow achievements
+  operation: Operation | "all"; // 'all' for rainbow achievements
   baseNumber: number;
   totalQuestions: number;
   earnedAt: Date;

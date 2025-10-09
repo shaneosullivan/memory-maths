@@ -1,45 +1,45 @@
 "use client";
 
-import { ReactNode } from 'react';
-import styles from './NumberGrid.module.css';
+import { ReactNode } from "react";
+import styles from "./NumberGrid.module.css";
 
 interface NumberGridProps {
   numbers: (number | string)[];
   selectedValue?: number | string;
   onSelect: (value: number | string) => void;
   columns?: 4 | 6 | 8;
-  variant?: 'default' | 'keypad';
+  variant?: "default" | "keypad";
   disabled?: boolean;
   className?: string;
   renderNumber?: (value: number | string) => ReactNode;
 }
 
-export default function NumberGrid({ 
+export default function NumberGrid({
   numbers,
   selectedValue,
   onSelect,
   columns = 8,
-  variant = 'default',
+  variant = "default",
   disabled = false,
-  className = '',
-  renderNumber
+  className = "",
+  renderNumber,
 }: NumberGridProps) {
   const containerClass = [
     styles.container,
     styles[`columns-${columns}`],
     styles[variant],
-    disabled ? styles.disabled : '',
-    className
-  ].filter(Boolean).join(' ');
-  
+    disabled ? styles.disabled : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div className={containerClass}>
       {numbers.map((number, index) => (
         <button
           key={`number-${index}`}
-          className={`${styles.numberButton} ${
-            selectedValue === number ? styles.selected : ''
-          }`}
+          className={`${styles.numberButton} ${selectedValue === number ? styles.selected : ""}`}
           onClick={() => onSelect(number)}
           disabled={disabled}
         >

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import styles from './Toaster.module.css';
+import React, { useState, useEffect } from "react";
+import styles from "./Toaster.module.css";
 
 interface ToasterProps {
-  category: 'correct' | 'wrong';
+  category: "correct" | "wrong";
   x: number;
   y: number;
   onComplete: () => void;
@@ -23,22 +23,18 @@ const Toaster: React.FC<ToasterProps> = ({ category, x, y, onComplete }) => {
     return () => clearTimeout(timer);
   }, [onComplete]);
 
-  const imageSrc = category === 'correct' ? '/correct.png' : '/wrong.png';
+  const imageSrc = category === "correct" ? "/correct.png" : "/wrong.png";
   const animationClass = `${styles.float} ${styles[`animation${animationType}`]}`;
 
   return (
-    <div 
+    <div
       className={`${styles.toaster} ${animationClass}`}
       style={{
         left: x - 50, // Center the 100px image on the x position
-        top: y - 50,  // Start 50px above the y position
+        top: y - 50, // Start 50px above the y position
       }}
     >
-      <img 
-        src={imageSrc}
-        alt={category}
-        className={styles.image}
-      />
+      <img src={imageSrc} alt={category} className={styles.image} />
     </div>
   );
 };

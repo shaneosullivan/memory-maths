@@ -57,11 +57,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -103,7 +99,8 @@
   font-weight: 700;
   border-radius: var(--radius-lg);
   background: var(--background-secondary);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 

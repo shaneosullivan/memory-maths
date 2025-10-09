@@ -18,7 +18,7 @@
 }
 
 .header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -462,7 +462,7 @@
     grid-template-columns: 1fr;
     gap: var(--space-6);
   }
-  
+
   .stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -472,90 +472,90 @@
   .container {
     padding: var(--space-4);
   }
-  
+
   .header {
     padding: var(--space-8) var(--space-4);
     margin-bottom: var(--space-6);
     border-radius: var(--radius-xl);
   }
-  
+
   .header h2 {
     font-size: var(--text-2xl);
     margin-bottom: var(--space-4);
   }
-  
+
   .progressBar {
     height: 10px;
     max-width: 100%;
   }
-  
+
   .progressText {
     font-size: var(--text-sm);
   }
-  
+
   .mistakes {
     font-size: var(--text-base);
   }
-  
+
   .questionSection {
     padding: var(--space-6);
     border-radius: var(--radius-xl);
   }
-  
+
   /* Back button responsive styles moved to BackButton.module.css */
-  
+
   .question {
     font-size: 2rem;
     gap: var(--space-2);
     margin-bottom: var(--space-6);
   }
-  
+
   .answer {
     min-width: 80px;
     padding: var(--space-2) var(--space-3);
     font-size: 2rem;
   }
-  
+
   .keypadSection {
     padding: var(--space-4);
     border-radius: var(--radius-xl);
   }
-  
+
   .summary {
     padding: var(--space-8);
     border-radius: var(--radius-xl);
   }
-  
+
   .summary h2 {
     font-size: var(--text-3xl);
     margin-bottom: var(--space-6);
   }
-  
+
   .stats {
     grid-template-columns: 1fr;
     gap: var(--space-4);
     margin-bottom: var(--space-8);
   }
-  
+
   .statCard {
     padding: var(--space-4);
     border-radius: var(--radius-lg);
   }
-  
+
   .statValue {
     font-size: var(--text-2xl);
   }
-  
+
   .questionList {
     max-height: 300px;
     padding: var(--space-3);
   }
-  
+
   .actions {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .newTestButton,
   .retryButton {
     width: 100%;
@@ -569,42 +569,42 @@
   .header {
     padding: var(--space-6) var(--space-3);
   }
-  
+
   .header h2 {
     font-size: var(--text-xl);
   }
-  
+
   .question {
     font-size: 1.5rem;
   }
-  
+
   .answer {
     font-size: 1.5rem;
     min-width: 60px;
   }
-  
+
   .questionSection,
   .keypadSection,
   .summary {
     padding: var(--space-4);
   }
-  
+
   .summary h2 {
     font-size: var(--text-2xl);
   }
-  
+
   .statValue {
     font-size: var(--text-xl);
   }
-  
+
   .breakdown h3 {
     font-size: var(--text-xl);
   }
-  
+
   .questionList {
     max-height: 250px;
   }
-  
+
   .questionItem {
     flex-direction: column;
     align-items: flex-start;
