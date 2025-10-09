@@ -40,13 +40,17 @@
 }
 
 .key::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05));
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(0, 0, 0, 0.05)
+  );
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -77,7 +81,11 @@
 }
 
 .enterKey::before {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(0, 0, 0, 0.1)
+  );
 }
 
 .enterKey:hover {
@@ -95,7 +103,11 @@
 }
 
 .deleteKey::before {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(0, 0, 0, 0.1)
+  );
 }
 
 .deleteKey:hover {
@@ -122,20 +134,20 @@
     gap: var(--space-2);
     max-width: 280px;
   }
-  
+
   .row {
     gap: var(--space-2);
   }
-  
+
   .key {
     font-size: var(--text-xl);
     border-radius: var(--radius-lg);
   }
-  
+
   .enterKey {
     font-size: var(--text-lg);
   }
-  
+
   .deleteKey {
     font-size: var(--text-base);
   }
@@ -145,16 +157,16 @@
   .keypad {
     max-width: 260px;
   }
-  
+
   .key {
     font-size: var(--text-lg);
     border-radius: var(--radius-md);
   }
-  
+
   .enterKey {
     font-size: var(--text-base);
   }
-  
+
   .deleteKey {
     font-size: var(--text-sm);
   }
@@ -168,6 +180,20 @@
   aspect-ratio: 1;
   font-size: var(--text-2xl) !important;
   font-weight: 700 !important;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Active (pressed) state for all keypad buttons */
+.numberKey:active,
+.enterKey:active,
+.deleteKey:active,
+.numberKey.active,
+.enterKey.active,
+.deleteKey.active {
+  border-color: var(--brand-primary) !important;
 }
 
 @media (max-width: 768px) {
