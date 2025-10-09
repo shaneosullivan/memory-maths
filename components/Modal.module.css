@@ -12,6 +12,7 @@
   z-index: 1000;
   padding: var(--space-6);
   animation: fadeIn 0.2s ease-out;
+  overflow-y: auto;
 }
 
 @keyframes fadeIn {
@@ -102,10 +103,17 @@
 @media (max-width: 768px) {
   .backdrop {
     padding: var(--space-4);
+    /* Align to flex-start on mobile so modal can scroll when keyboard appears */
+    align-items: flex-start;
+    /* Add top padding to provide spacing when modal scrolls to top */
+    padding-top: max(var(--space-8), env(safe-area-inset-top));
   }
 
   .modal {
-    max-height: 85vh;
+    /* Use auto height on mobile to allow proper scrolling */
+    max-height: none;
+    /* Ensure modal doesn't exceed viewport minus safe areas */
+    margin-bottom: var(--space-4);
   }
 
   .header {
