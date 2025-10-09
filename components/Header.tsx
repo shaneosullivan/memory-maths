@@ -6,7 +6,7 @@ import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
 import { Button, ButtonLink } from "@/components/ui";
 import styles from "./Header.module.css";
-import { LOCAL_STORAGE_PROFILES_KEY } from "@/lib/consts";
+import { LOCAL_STORAGE_PROFILES_KEY, LOCAL_STORAGE_CURRENT_PROFILE_KEY } from "@/lib/consts";
 import { localStorage } from "@/utils/storage";
 
 export default function Header() {
@@ -86,8 +86,8 @@ export default function Header() {
                   fullWidth
                   onClick={() => {
                     dispatch({ type: "SET_PROFILE", payload: null });
-                    setProfileId("");
-                    setShowDropdown(false);
+                    localStorage.removeItem(LOCAL_STORAGE_CURRENT_PROFILE_KEY);
+                    window.location.href = "/";
                   }}
                   className={styles.switchProfileButton}
                 >

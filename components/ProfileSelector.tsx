@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import { Profile } from "@/types";
-import { Card, Button, Input } from "@/components/ui";
+import { Card, Button } from "@/components/ui";
 import ProfileListModal from "./ProfileListModal";
+import CreateProfileModal from "./CreateProfileModal";
 import styles from "./ProfileSelector.module.css";
 import { LOCAL_STORAGE_PROFILES_KEY } from "@/lib/consts";
 import { localStorage } from "@/utils/storage";
@@ -14,8 +15,7 @@ export default function ProfileSelector() {
   const { createProfile, switchProfile, deleteProfile } = useApp();
   const { setProfileId } = useUrlNavigation();
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newProfileName, setNewProfileName] = useState("");
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProfileListModal, setShowProfileListModal] = useState(false);
 
   useEffect(() => {
@@ -23,13 +23,10 @@ export default function ProfileSelector() {
     setProfiles(savedProfiles);
   }, []);
 
-  const handleCreateProfile = () => {
-    if (newProfileName.trim()) {
-      createProfile(newProfileName.trim());
-      setProfileId(Date.now().toString()); // Use timestamp as simple ID
-      setNewProfileName("");
-      setShowCreateForm(false);
-    }
+  const handleCreateProfile = (name: string) => {
+    createProfile(name);
+    setProfileId(Date.now().toString()); // Use timestamp as simple ID
+    setShowCreateModal(false);
   };
 
   const handleUseGuest = () => {
@@ -76,49 +73,15 @@ export default function ProfileSelector() {
         )}
 
         <div className={styles.section}>
-          {!showCreateForm ? (
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth
-              onClick={() => setShowCreateForm(true)}
-              icon="✨"
-            >
-              Create New Profile
-            </Button>
-          ) : (
-            <div className={styles.createForm}>
-              <Input
-                variant="glass"
-                size="lg"
-                fullWidth
-                placeholder="Enter your name"
-                value={newProfileName}
-                onChange={(e) => setNewProfileName(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleCreateProfile()}
-              />
-              <div className={styles.formButtons}>
-                <Button
-                  variant="primary"
-                  size="md"
-                  onClick={handleCreateProfile}
-                  disabled={!newProfileName.trim()}
-                >
-                  Create
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="md"
-                  onClick={() => {
-                    setShowCreateForm(false);
-                    setNewProfileName("");
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          )}
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={() => setShowCreateModal(true)}
+            icon="✨"
+          >
+            Create New Profile
+          </Button>
         </div>
 
         <div className={styles.section}>
@@ -135,6 +98,14 @@ export default function ProfileSelector() {
           onSelectProfile={handleSwitchProfile}
           onDeleteProfile={handleDeleteProfile}
           onClose={() => setShowProfileListModal(false)}
+        />
+      )}
+
+      {showCreateModal && (
+        <CreateProfileModal
+          existingProfiles={profiles}
+          onCreateProfile={handleCreateProfile}
+          onClose={() => setShowCreateModal(false)}
         />
       )}
     </div>
