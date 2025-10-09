@@ -17,6 +17,7 @@ interface UrlState {
   currentIndex?: number;
   profileId?: string;
   backUrl?: string;
+  rainbow?: boolean;
 }
 
 export function useUrlNavigation() {
@@ -37,6 +38,7 @@ export function useUrlNavigation() {
       currentIndex: params.get("currentIndex") ? parseInt(params.get("currentIndex")!) : undefined,
       profileId: params.get("profileId") || undefined,
       backUrl: params.get("backUrl") || undefined,
+      rainbow: params.get("rainbow") === "true",
     };
   }, [searchParams]);
 

@@ -7,6 +7,7 @@ import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
 import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
+import { shouldShowRainbowTimer } from "@/utils/achievements";
 import styles from "./PracticePhase.module.css";
 
 interface PracticePhaseProps {
@@ -220,6 +221,11 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
     const correctAnswers = state.calculations.filter((calc) => calc.isCorrect).length;
     const totalQuestions = state.calculations.length;
     const accuracy = Math.round((correctAnswers / totalQuestions) * 100);
+    const canEarnRainbow = shouldShowRainbowTimer(
+      state.currentProfile,
+      state.baseNumber || 2,
+      totalQuestions
+    );
 
     return (
       <div className={styles.container}>
@@ -241,14 +247,41 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
               <div className={styles.statLabel}>Accuracy</div>
             </div>
           </div>
-          <FloatingButton
-            onClick={() => {
-              navigateToPhase("test");
-              moveToPhase("test");
-            }}
-          >
-            Go Test Myself!
-          </FloatingButton>
+          {canEarnRainbow ? (
+            <div className={styles.testButtons}>
+              <Button
+                variant="primary"
+                size="xl"
+                onClick={() => {
+                  navigateToPhase("test", { rainbow: false });
+                  moveToPhase("test");
+                }}
+                className={styles.testButton}
+              >
+                Go Test Myself!
+              </Button>
+              <Button
+                variant="primary"
+                size="xl"
+                onClick={() => {
+                  navigateToPhase("test", { rainbow: true });
+                  moveToPhase("test");
+                }}
+                className={styles.testButton}
+              >
+                🌈 Catch A Rainbow
+              </Button>
+            </div>
+          ) : (
+            <FloatingButton
+              onClick={() => {
+                navigateToPhase("test", { rainbow: false });
+                moveToPhase("test");
+              }}
+            >
+              Go Test Myself!
+            </FloatingButton>
+          )}
           <div className={styles.actions}>
             <Button
               variant="secondary"

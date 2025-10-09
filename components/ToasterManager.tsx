@@ -15,22 +15,18 @@ const ToasterManager = React.forwardRef<
   {}
 >((props, ref) => {
   const [toasters, setToasters] = useState<ToasterItem[]>([]);
-  const [nextId, setNextId] = useState(0);
 
-  const showToaster = useCallback(
-    (category: "correct" | "wrong", x: number, y: number) => {
-      const newToaster: ToasterItem = {
-        id: nextId,
-        category,
-        x,
-        y,
-      };
+  const showToaster = useCallback((category: "correct" | "wrong", x: number, y: number) => {
+    const newToaster: ToasterItem = {
+      id: Date.now() + Math.random(), // Use timestamp + random to ensure uniqueness
+      category,
+      x,
+      y,
+    };
 
-      setToasters((prev) => [...prev, newToaster]);
-      setNextId((prev) => prev + 1);
-    },
-    [nextId]
-  );
+    // Clear all existing toasters and show only the new one
+    setToasters([newToaster]);
+  }, []);
 
   const removeToaster = useCallback((id: number) => {
     setToasters((prev) => prev.filter((toaster) => toaster.id !== id));

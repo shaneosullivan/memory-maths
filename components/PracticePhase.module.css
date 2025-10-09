@@ -273,13 +273,39 @@
   color: var(--foreground-muted);
 }
 
+.testButtons {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  margin-bottom: var(--space-8);
+  flex-wrap: nowrap;
+}
+
 .actions {
   display: flex;
   gap: var(--space-4);
   justify-content: center;
 }
 
-.testButton,
+.testButton {
+  min-width: 180px;
+  max-width: 250px;
+  flex: 1;
+  box-shadow: var(--shadow-xl) !important;
+  transition: all var(--transition-fast) !important;
+  white-space: nowrap;
+}
+
+.testButton:hover {
+  box-shadow: 0 20px 40px rgba(0, 102, 255, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+.testButton:active {
+  transform: translateY(0) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
 .retryButton {
   display: inline-flex;
   align-items: center;
@@ -290,19 +316,6 @@
   font-weight: 600;
   transition: all var(--transition-fast);
   box-shadow: var(--shadow-md);
-}
-
-.testButton {
-  background: var(--success);
-  border: 1px solid var(--success);
-  color: white;
-}
-
-.testButton:hover {
-  background: var(--success-hover);
-  border-color: var(--success-hover);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-1px);
 }
 
 .retryButton {
@@ -435,12 +448,23 @@
     font-size: var(--text-2xl);
   }
 
+  .testButtons {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: var(--space-6);
+  }
+
   .actions {
     flex-direction: column;
     align-items: center;
   }
 
-  .testButton,
+  .testButton {
+    width: 100%;
+    max-width: 300px;
+    min-width: unset;
+  }
+
   .retryButton {
     width: 100%;
     max-width: 300px;
@@ -450,6 +474,10 @@
 }
 
 @media (max-width: 480px) {
+  .testButtons {
+    flex-direction: column;
+  }
+
   .header {
     padding: var(--space-6) var(--space-3);
   }

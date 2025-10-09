@@ -332,6 +332,30 @@ export function AppProvider({ children }: { children: ReactNode }) {
             skipped: undefined,
           }))
           .sort(() => Math.random() - 0.5);
+
+        // Ensure no adjacent calculations differ by only 1 in their answers
+        // Single pass: swap with next item if current violates rule
+        for (let i = 0; i < shuffledCalculations.length - 1; i++) {
+          const current = shuffledCalculations[i];
+          const next = shuffledCalculations[i + 1];
+          const diff = Math.abs(current.answer - next.answer);
+
+          if (diff === 1) {
+            // Try to swap with item at i+2 if it exists and doesn't violate rule
+            if (i + 2 < shuffledCalculations.length) {
+              const afterNext = shuffledCalculations[i + 2];
+              const diffWithAfterNext = Math.abs(current.answer - afterNext.answer);
+
+              // Only swap if it doesn't create another adjacent-by-1 issue
+              if (diffWithAfterNext !== 1) {
+                // Swap i+1 and i+2
+                shuffledCalculations[i + 1] = afterNext;
+                shuffledCalculations[i + 2] = next;
+              }
+            }
+          }
+        }
+
         dispatch({ type: "SET_CALCULATIONS", payload: shuffledCalculations });
       }
     }

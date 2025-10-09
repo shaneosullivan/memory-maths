@@ -156,7 +156,11 @@
 }
 
 .questionActions {
-  margin-top: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
 }
 
 .skipButton {
@@ -455,6 +459,26 @@
 }
 
 /* Back button styles moved to BackButton.module.css */
+
+/* Timeout Modal Styles */
+.modalContent {
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.modalMessage {
+  font-size: var(--text-xl);
+  color: var(--foreground);
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+}
+
+.modalActions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 /* Mobile Responsive */
 @media (max-width: 1024px) {

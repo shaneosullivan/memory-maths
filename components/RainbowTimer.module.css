@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.timer {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.timeText {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-geist-mono);
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .timer {
+    width: 100px;
+    height: 100px;
+  }
+
+  .timeText {
+    font-size: 20px;
+  }
+
+  .label {
+    font-size: var(--text-xs);
+  }
+}

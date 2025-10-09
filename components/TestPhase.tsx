@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Operation, Profile, Achievement } from "@/types";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
 import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
+import RainbowTimer from "@/components/RainbowTimer";
+import Modal from "@/components/Modal";
 import styles from "./TestPhase.module.css";
 import { checkForNewAchievements } from "@/utils/achievements";
 
@@ -35,6 +37,10 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
   const [currentInput, setCurrentInput] = useState("");
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const [hasProcessedCompletion, setHasProcessedCompletion] = useState(false);
+  const [showRainbowTimer, setShowRainbowTimer] = useState(false);
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [totalTimerDuration, setTotalTimerDuration] = useState(0);
+  const [timerStartTime, setTimerStartTime] = useState<number | null>(null);
 
   // Sync AppContext with URL state when component mounts
   useEffect(() => {
@@ -82,6 +88,29 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
               skipped: undefined,
             }))
             .sort(() => Math.random() - 0.5);
+
+          // Ensure no adjacent calculations differ by only 1 in their answers
+          // Single pass: swap with next item if current violates rule
+          for (let i = 0; i < shuffledCalculations.length - 1; i++) {
+            const current = shuffledCalculations[i];
+            const next = shuffledCalculations[i + 1];
+            const diff = Math.abs(current.answer - next.answer);
+
+            if (diff === 1) {
+              // Try to swap with item at i+2 if it exists and doesn't violate rule
+              if (i + 2 < shuffledCalculations.length) {
+                const afterNext = shuffledCalculations[i + 2];
+                const diffWithAfterNext = Math.abs(current.answer - afterNext.answer);
+
+                // Only swap if it doesn't create another adjacent-by-1 issue
+                if (diffWithAfterNext !== 1) {
+                  // Swap i+1 and i+2
+                  shuffledCalculations[i + 1] = afterNext;
+                  shuffledCalculations[i + 2] = next;
+                }
+              }
+            }
+          }
 
           // Update calculations and reset session
           dispatch({ type: "SET_CALCULATIONS", payload: shuffledCalculations });
@@ -177,6 +206,29 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
   ]);
 
   const currentCalculation = state.calculations[state.currentCalculationIndex];
+
+  // Check if rainbow timer should be shown based on URL parameter and calculate total time
+  useEffect(() => {
+    const urlState = getCurrentState();
+    const shouldShow = urlState.rainbow || false;
+    setShowRainbowTimer(shouldShow);
+
+    if (shouldShow && state.calculations.length > 0 && timerStartTime === null) {
+      // Calculate total time: (2 seconds per question) + (3 seconds * total digits across all answers)
+      const totalDigits = state.calculations.reduce((sum, calc) => {
+        const answerStr = Math.abs(Math.floor(calc.answer)).toString();
+        return sum + answerStr.length;
+      }, 0);
+      const totalTime = state.calculations.length * 2 + totalDigits * 3;
+      setTotalTimerDuration(totalTime);
+      setTimerStartTime(Date.now());
+    }
+  }, [getCurrentState, state.calculations, timerStartTime]);
+
+  // Handle timer timeout - show modal
+  const handleTimeout = useCallback(() => {
+    setShowTimeoutModal(true);
+  }, []);
   const isComplete =
     state.calculations.length > 0 &&
     state.calculations.every((calc) => calc.userAnswer !== undefined || calc.skipped);
@@ -391,6 +443,7 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
       <div className={styles.content}>
         <Card variant="elevated" padding="lg" className={styles.questionSection}>
           <BackButton />
+
           <div className={styles.question}>
             <span className={styles.operand}>{currentCalculation.operand1}</span>
             <span className={styles.operator}>
@@ -402,6 +455,9 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
           </div>
 
           <div className={styles.questionActions}>
+            {showRainbowTimer && totalTimerDuration > 0 && (
+              <RainbowTimer duration={totalTimerDuration} onTimeout={handleTimeout} />
+            )}
             <Button variant="danger" size="md" onClick={handleSkip}>
               Skip Question
             </Button>
@@ -412,6 +468,40 @@ export default function TestPhase({ toasterRef }: TestPhaseProps) {
           <Keypad onInput={handleKeypadInput} showDecimal={state.operation === "division"} />
         </Card>
       </div>
+
+      {showTimeoutModal && (
+        <Modal title="Time's Up! ⏰" onClose={() => {}} showCloseButton={false}>
+          <div className={styles.modalContent}>
+            <p className={styles.modalMessage}>
+              Your time has run out! Better luck next time.
+            </p>
+            <div className={styles.modalActions}>
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => {
+                  setShowTimeoutModal(false);
+                  navigateToPhase("test", { rainbow: true });
+                  // Reset the test
+                  window.location.reload();
+                }}
+              >
+                Try Again
+              </Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={() => {
+                  setShowTimeoutModal(false);
+                  handleBackToLearning();
+                }}
+              >
+                Start New Session
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

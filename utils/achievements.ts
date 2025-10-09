@@ -49,22 +49,16 @@ export function checkForNewAchievements(
     newAchievements.push(achievement);
   }
 
-  // Check for rainbow achievement (gold in all 4 operations for same base number)
-  if (achievementType === "gold") {
-    const operations: Operation[] = ["addition", "subtraction", "multiplication", "division"];
-    const hasGoldInAllOperations = operations.every((operation) => {
-      // Check if user has gold for this operation and base number
-      return (
-        profile.achievements.some(
-          (achievement) =>
-            achievement.operation === operation &&
-            achievement.baseNumber === sessionStats.baseNumber &&
-            achievement.type === "gold"
-        ) || operation === sessionStats.operation
-      ); // Include current session
-    });
+  // Check for rainbow achievement (100% accuracy on all 19 questions with time limit)
+  // Rainbow can only be earned if user already has a gold achievement for this base number
+  if (sessionStats.totalQuestions === 19) {
+    // Check if user already has a gold achievement for this base number (any operation)
+    const hasGoldForThisNumber = profile.achievements.some(
+      (achievement) =>
+        achievement.baseNumber === sessionStats.baseNumber && achievement.type === "gold"
+    );
 
-    if (hasGoldInAllOperations) {
+    if (hasGoldForThisNumber) {
       // Check if user already has rainbow for this base number
       const hasRainbow = profile.achievements.some(
         (achievement) =>
@@ -77,7 +71,7 @@ export function checkForNewAchievements(
           type: "rainbow",
           operation: "all",
           baseNumber: sessionStats.baseNumber,
-          totalQuestions: 19, // Rainbow is always for maximum questions
+          totalQuestions: 19,
           earnedAt: new Date(),
         };
         newAchievements.push(rainbowAchievement);
@@ -107,4 +101,37 @@ export function groupAchievementsByOperation(achievements: Achievement[]) {
   };
 
   return grouped;
+}
+
+/**
+ * Check if the rainbow timer should be shown for this test session
+ * Timer is only shown if:
+ * 1. User has a gold achievement for this base number
+ * 2. Test has all 19 questions
+ * 3. User doesn't already have a rainbow for this base number
+ */
+export function shouldShowRainbowTimer(
+  profile: Profile | null,
+  baseNumber: number,
+  totalQuestions: number
+): boolean {
+  if (!profile || totalQuestions !== 19) {
+    return false;
+  }
+
+  // Check if user has gold for this base number
+  const hasGold = profile.achievements.some(
+    (achievement) => achievement.baseNumber === baseNumber && achievement.type === "gold"
+  );
+
+  if (!hasGold) {
+    return false;
+  }
+
+  // Check if user already has rainbow for this base number
+  const hasRainbow = profile.achievements.some(
+    (achievement) => achievement.type === "rainbow" && achievement.baseNumber === baseNumber
+  );
+
+  return !hasRainbow;
 }
