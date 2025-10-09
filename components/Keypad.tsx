@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui";
+import { PressableButton } from "@/components/ui";
 import styles from "./Keypad.module.css";
 
 interface KeypadProps {
@@ -10,8 +9,6 @@ interface KeypadProps {
 }
 
 export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
-  const [activeKey, setActiveKey] = useState<string | null>(null);
-
   const keys = [
     ["7", "8", "9", "delete"],
     ["4", "5", "6", ""],
@@ -23,39 +20,33 @@ export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
     onInput(key);
   };
 
-  const handleTouchStart = (key: string) => {
-    setActiveKey(key);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent, key: string) => {
-    e.preventDefault();
-    setActiveKey(null);
-    handleKeyPress(key);
-  };
-
-  const handleMouseDown = (key: string) => {
-    setActiveKey(key);
-  };
-
-  const handleMouseUp = () => {
-    setActiveKey(null);
-  };
-
   const getKeyVariant = (key: string) => {
-    if (key === "enter") return "primary";
-    if (key === "delete") return "danger";
+    if (key === "enter") {
+      return "primary";
+    }
+    if (key === "delete") {
+      return "danger";
+    }
     return "secondary";
   };
 
   const getKeyClassName = (key: string) => {
-    const baseClass = key === "enter" ? styles.enterKey : key === "delete" ? styles.deleteKey : styles.numberKey;
-    const activeClass = activeKey === key ? styles.active : "";
-    return `${baseClass} ${activeClass}`.trim();
+    if (key === "enter") {
+      return styles.enterKey;
+    }
+    if (key === "delete") {
+      return styles.deleteKey;
+    }
+    return styles.numberKey;
   };
 
   const getKeyLabel = (key: string) => {
-    if (key === "delete") return "⌫";
-    if (key === "enter") return "✓";
+    if (key === "delete") {
+      return "⌫";
+    }
+    if (key === "enter") {
+      return "✓";
+    }
     return key;
   };
 
@@ -73,20 +64,15 @@ export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
               );
             }
             return (
-              <Button
+              <PressableButton
                 key={`keypad_key_${key}`}
                 variant={getKeyVariant(key) as any}
-                onClick={() => handleKeyPress(key)}
-                onTouchStart={() => handleTouchStart(key)}
-                onTouchEnd={(e) => handleTouchEnd(e, key)}
-                onMouseDown={() => handleMouseDown(key)}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                onPress={() => handleKeyPress(key)}
                 className={getKeyClassName(key)}
                 data-keypad-enter={key === "enter" ? "true" : undefined}
               >
                 {getKeyLabel(key)}
-              </Button>
+              </PressableButton>
             );
           })}
         </div>
