@@ -121,6 +121,17 @@
 
 /* Back button styles moved to BackButton.module.css */
 
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.cardHeader > * {
+  margin-bottom: 0;
+}
+
 .question {
   display: flex;
   align-items: center;

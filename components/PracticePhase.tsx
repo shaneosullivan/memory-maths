@@ -318,7 +318,19 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
 
       <div className={styles.content}>
         <Card variant="elevated" padding="lg" className={styles.questionSection}>
-          <BackButton />
+          <div className={styles.cardHeader}>
+            <BackButton />
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => {
+                navigateToPhase("test", { rainbow: false });
+                moveToPhase("test");
+              }}
+            >
+              Skip Practice
+            </Button>
+          </div>
           <div className={styles.question}>
             <span className={styles.operand}>{currentCalculation.operand1}</span>
             <span className={styles.operator}>
