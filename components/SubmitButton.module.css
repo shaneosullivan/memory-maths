@@ -1,0 +1,26 @@
+.submitButton {
+  min-width: 60px;
+  height: 60px;
+  font-size: 2rem;
+  padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+  background: linear-gradient(135deg, var(--success), var(--success-hover)) !important;
+  color: white !important;
+  border-color: var(--success) !important;
+  transform: scale(1.2) translateX(16px) !important;
+}
+
+.submitButton:hover:not(:disabled) {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, var(--success-hover), var(--success)) !important;
+  border-color: var(--success-hover) !important;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: scale(1) translateX(24px) !important;
+}

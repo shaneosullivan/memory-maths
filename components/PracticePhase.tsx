@@ -6,6 +6,7 @@ import { Operation } from "@/types";
 import { useUrlNavigation } from "@/hooks/useUrlNavigation";
 import Keypad from "@/components/Keypad";
 import BackButton from "@/components/BackButton";
+import SubmitButton from "@/components/SubmitButton";
 import { GradientHeader, ProgressBar, Button, Card, FloatingButton } from "@/components/ui";
 import { shouldShowRainbowTimer } from "@/utils/achievements";
 import styles from "./PracticePhase.module.css";
@@ -339,6 +340,17 @@ export default function PracticePhase({ toasterRef }: PracticePhaseProps) {
             <span className={styles.operand}>{currentCalculation.operand2}</span>
             <span className={styles.equals}>=</span>
             <span className={styles.answer}>{currentInput || "?"}</span>
+            <SubmitButton
+              onClick={() => {
+                if (currentInput) {
+                  const answer = parseFloat(currentInput);
+                  handleSubmitAnswer(answer);
+                  setCurrentInput("");
+                  setShowMultipleChoice(false);
+                }
+              }}
+              disabled={!currentInput}
+            />
           </div>
 
           {!showMultipleChoice && (

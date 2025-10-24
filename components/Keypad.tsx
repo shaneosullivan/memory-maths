@@ -13,7 +13,7 @@ export default function Keypad({ onInput, showDecimal = false }: KeypadProps) {
     ["7", "8", "9", "delete"],
     ["4", "5", "6", ""],
     ["1", "2", "3", ""],
-    ["0", "", showDecimal ? "." : "", "enter"],
+    ["0", "", showDecimal ? "." : "", ""],
   ];
 
   const handleKeyPress = (key: string) => {
