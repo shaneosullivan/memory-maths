@@ -31,37 +31,8 @@ export default function BackButton({
       return;
     }
 
-    const targetPath = targetUrl.startsWith("?") ? targetUrl : `?${targetUrl}`;
-    const maxSteps = 20; // Safety limit
-    let attempts = 0;
-
-    const popUntilMatch = () => {
-      attempts++;
-
-      // Safety check to prevent infinite loops
-      if (attempts > maxSteps || window.history.length <= 1) {
-        router.push(targetUrl);
-        return;
-      }
-
-      const handlePopState = () => {
-        window.removeEventListener("popstate", handlePopState);
-        const currentUrl = window.location.search || "/";
-
-        if (currentUrl === targetPath) {
-          // Found the target URL, we're done
-          return;
-        } else {
-          // Not the target, keep going back
-          popUntilMatch();
-        }
-      };
-
-      window.addEventListener("popstate", handlePopState);
-      window.history.back();
-    };
-
-    popUntilMatch();
+    // Simply go back one step in history
+    window.history.back();
   };
 
   return (

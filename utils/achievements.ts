@@ -1,4 +1,4 @@
-import { Achievement, AchievementType, Operation, Profile, SessionStats } from "../types";
+import { Achievement, AchievementType, Profile, SessionStats } from "../types";
 
 export function getAchievementType(totalQuestions: number): AchievementType | null {
   if (totalQuestions <= 9) {
@@ -7,7 +7,7 @@ export function getAchievementType(totalQuestions: number): AchievementType | nu
   if (totalQuestions <= 15) {
     return "silver";
   }
-  if (totalQuestions === 19) {
+  if (totalQuestions >= 19) {
     return "gold";
   }
   return null;
